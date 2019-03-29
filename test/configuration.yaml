@@ -16,5 +16,4 @@ http:
   base_url: example.duckdns.org:8123
 
 recorder:
-  purge_keep_days: 5
-  db_url: sqlite:////home/hass/.homeassistant/test
+  db_url: sqlite:////config/hass/.homeassistant/test

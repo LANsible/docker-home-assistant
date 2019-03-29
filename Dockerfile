@@ -5,8 +5,8 @@ FROM multiarch/alpine:${ARCH}-v3.9 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG HOMEASSISTANT_VERSION=0.89.2
-ARG PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors|buienradar"
+ARG VERSION=0.89.2
+ARG PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors"
 
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
@@ -24,7 +24,7 @@ RUN apk add --no-cache \
         make
 
 # Setup requirements files
-ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${HOMEASSISTANT_VERSION}/requirements_all.txt" /tmp
+ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
 RUN sed '/^$/q' /tmp/requirements_all.txt > /tmp/requirements_core.txt && \
     sed '1,/^$/d' /tmp/requirements_all.txt > /requirements_plugins.txt && \
     egrep -e "${PLUGINS}" /requirements_plugins.txt | grep -v '#' > /tmp/requirements_plugins_filtered.txt
@@ -32,7 +32,13 @@ RUN sed '/^$/q' /tmp/requirements_all.txt > /tmp/requirements_core.txt && \
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
     pip3 install --no-cache-dir --user --no-warn-script-location -r /tmp/requirements_core.txt -r /tmp/requirements_plugins_filtered.txt && \
-    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${HOMEASSISTANT_VERSION}"
+    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}"
+
+# Tricks to allow readonly container
+RUN mkdir -p /home/hass/deps && \
+    echo ${VERSION} >> /home/hass/.HA_VERSION && \
+    mkdir /config && \
+    ln -s /config/configuration.yaml /home/hass/configuration.yaml
 
 FROM multiarch/alpine:${ARCH}-v3.9
 
@@ -53,6 +59,9 @@ COPY --from=builder --chown=8123:8123 /root/.local/lib/python3.6/site-packages/ 
 # Copy pip installed binaries
 COPY --from=builder --chown=8123:8123 /root/.local/bin ${HOME}/.local/bin
 
+# Copy config setup
+COPY --from=builder --chown=8123:8123 /home/hass /home/hass
+
 # Copy needed libs from builder
 COPY --from=builder \
     /usr/lib/libssl.so.45 \
@@ -63,4 +72,4 @@ RUN apk add --no-cache python3
 
 USER hass
 ENTRYPOINT ["hass"]
-CMD ["--config=/config", "--log-file=/dev/stdout", "--skip-pip"]
+CMD ["--config=/home/hass/", "--log-file=/dev/stdout", "--skip-pip"]
