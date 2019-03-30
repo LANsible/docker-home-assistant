@@ -6,7 +6,7 @@ env:
   global:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
-    - CONTAINER_NAME=mosquitto
+    - CONTAINER_NAME=homeassistant
 
 services:
   - docker
@@ -14,22 +14,19 @@ services:
 matrix:
   include:
     # amd64
-    - env: MOSQUITTO_VERSION=v1.5.8 ARCH=amd64
-    - env: MOSQUITTO_VERSION=master ARCH=amd64
+    - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=amd64
 
     # arm64
-    - env: MOSQUITTO_VERSION=v1.5.8 ARCH=arm64
-    - env: MOSQUITTO_VERSION=master ARCH=arm64
+    - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=arm64
 
     # i386
-    - env: MOSQUITTO_VERSION=v1.5.8 ARCH=i386
-    - env: MOSQUITTO_VERSION=master ARCH=i386
+    - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=i386
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   # Pipe to true since the tag could be non existing
   - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:builder-${ARCH} || true
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${MOSQUITTO_VERSION}-${ARCH} || true
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH} || true
 
 script:
   # Build and push builder for faster image builds
@@ -37,17 +34,17 @@ script:
   - docker build .
       --target builder
       --build-arg ARCH=${ARCH}
-      --build-arg MOSQUITTO_VERSION=${MOSQUITTO_VERSION}
+      --build-arg VERSION=${HOMEASSISTANT_VERSION}
       --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:builder-${ARCH}
       --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:builder-${ARCH}
 
-  # Build Mosquitto container
+  # Build homeassistant container
   - docker build .
       --build-arg ARCH=${ARCH}
-      --build-arg MOSQUITTO_VERSION=${MOSQUITTO_VERSION}
+      --build-arg VERSION=${HOMEASSISTANT_VERSION}
       --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:builder-${ARCH}
-      --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${MOSQUITTO_VERSION}-${ARCH}
-      --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${MOSQUITTO_VERSION}-${ARCH}
+      --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}
+      --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}
 
 #TODO: Write a test stage
 

@@ -8,4 +8,4 @@ wget https://github.com/estesp/manifest-tool/releases/download/v1.0.0-rc2/manife
 chmod +x manifest-tool
 
 echo "Deploying manifest"
-./manifest-tool push from-spec manifest.yml
+./manifest-tool push from-spec manifests/manifest-${HOMEASSISTANT_VERSION}.yml

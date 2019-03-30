@@ -1,0 +1,17 @@
+---
+image: lansible/mosquitto:latest
+tags:
+  - 0.90.2
+manifests:
+  - image: lansible/mosquitto:0.90.2-amd64
+    platform:
+      architecture: amd64
+      os: linux
+  - image: lansible/mosquitto:0.90.2-arm64
+    platform:
+      architecture: arm64
+      os: linux
+  - image: lansible/mosquitto:0.90.2-i386
+    platform:
+      architecture: '386'
+      os: linux

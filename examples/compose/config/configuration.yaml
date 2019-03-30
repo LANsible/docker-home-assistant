@@ -11,9 +11,4 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: Europe/Amsterdam
 
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-http:
-  base_url: example.duckdns.org:8123
-
-recorder:
-  db_url: sqlite:////config/hass/.homeassistant/test
+frontend:
