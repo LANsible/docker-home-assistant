@@ -37,11 +37,11 @@ docker build . \
 ```
 The arguments are:
 
-| Build argument | Description                                    | Example               |
-|----------------|------------------------------------------------|-----------------------|
-| `ARCH`         | Architecture to build (amd64, arm64, i386)     | amd64                 |
-| `VERSION`      | Version of Home Assistant                      | 0.90.2                |
-| `PLUGINS`      | List of pip plugins separated by a pipe symbol | "frontend|sqlalchemy" |
+| Build argument | Description                                    | Example                 |
+|----------------|------------------------------------------------|-------------------------|
+| `ARCH`         | Architecture to build (amd64, arm64, i386)     | `amd64`                 |
+| `VERSION`      | Version of Home Assistant                      | `0.90.2`                |
+| `PLUGINS`      | List of pip plugins separated by a pipe symbol | `"frontend|sqlalchemy"` |
 
 To speed up the build the builder part of the Dockerfile is available to use the cache from:
 
