@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Deploying ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${ARCH}"
+echo "Deploying ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}"
 echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
 docker push ${DOCKER_NAMESPACE}/${CONTAINER_NAME}
 
