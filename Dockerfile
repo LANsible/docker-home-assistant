@@ -32,7 +32,7 @@ RUN sed '/^$/q' /tmp/requirements_all.txt > /tmp/requirements_core.txt && \
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
     pip3 install --no-cache-dir --user --no-warn-script-location -r /tmp/requirements_core.txt -r /tmp/requirements_plugins_filtered.txt && \
-    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}"
+    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}" mysqlclient
 
 # Tricks to allow readonly container
 # Create deps directory so HA does not
@@ -70,7 +70,9 @@ COPY --from=builder \
     /usr/lib/libcrypto.so.43 \
     /lib/
 
-RUN apk add --no-cache python3
+RUN apk add --no-cache \
+    python3 \
+    mariadb-dev
 
 USER hass
 ENTRYPOINT ["hass"]
