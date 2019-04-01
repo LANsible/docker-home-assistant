@@ -21,7 +21,8 @@ RUN apk add --no-cache \
         gcc \
         musl-dev \
         libressl-dev \
-        make
+        make \
+        mariadb-dev
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
@@ -71,8 +72,7 @@ COPY --from=builder \
     /lib/
 
 RUN apk add --no-cache \
-    python3 \
-    mariadb-dev
+    python3
 
 USER hass
 ENTRYPOINT ["hass"]
