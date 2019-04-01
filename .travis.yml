@@ -7,6 +7,7 @@ env:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
     - CONTAINER_NAME=homeassistant
+    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors"
 
 services:
   - docker
@@ -25,8 +26,8 @@ matrix:
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   # Pipe to true since the tag could be non existing
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:builder-${ARCH} || true
   - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH} || true
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder || true
 
 script:
   # Build and push builder for faster image builds
@@ -35,8 +36,9 @@ script:
       --target builder
       --build-arg ARCH=${ARCH}
       --build-arg VERSION=${HOMEASSISTANT_VERSION}
-      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
-      --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
+      --build-arg PLUGINS=${PLUGINS}
+      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder
+      --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder
   - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker push ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}
 

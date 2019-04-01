@@ -5,14 +5,14 @@ FROM multiarch/alpine:${ARCH}-v3.9 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG VERSION=0.89.2
-ARG PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors"
+ARG VERSION=0.90.2
+ARG PLUGINS="frontend|sqlalchemy"
 
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
 
 RUN addgroup -S -g 8123 hass 2>/dev/null && \
-    adduser -S -u 8123 -D -H -h /home/hass -s /sbin/nologin -G hass -G tty -g hass hass 2>/dev/null
+    adduser -S -u 8123 -D -H -h /home/hass -s /sbin/nologin -G hass -g hass hass 2>/dev/null
 
 RUN apk add --no-cache \
         git \
@@ -35,10 +35,12 @@ RUN pip3 install --upgrade --user --no-cache-dir pip && \
     pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}"
 
 # Tricks to allow readonly container
+# Create deps directory so HA does not
+# Create symlink to place where config should be mounted
 RUN mkdir -p /home/hass/deps && \
     echo ${VERSION} >> /home/hass/.HA_VERSION && \
     mkdir /config && \
-    ln -s /config/configuration.yaml /home/hass/configuration.yaml
+    ln -sf /config/configuration.yaml /home/hass/configuration.yaml
 
 FROM multiarch/alpine:${ARCH}-v3.9
 
@@ -72,4 +74,4 @@ RUN apk add --no-cache python3
 
 USER hass
 ENTRYPOINT ["hass"]
-CMD ["--config=/home/hass/", "--log-file=/dev/stdout", "--skip-pip"]
+CMD ["--config=/home/hass/", "--log-file=/proc/self/fd/1", "--skip-pip"]
