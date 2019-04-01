@@ -6,7 +6,7 @@ env:
   global:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
-    - CONTAINER_NAME=homeassistant
+    - CONTAINER_NAME=home-assistant
     - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors"
 
 services:

@@ -33,7 +33,7 @@ docker build . \
       --build-arg ARCH=amd64 \
       --build-arg VERSION=0.90.2 \
       --build-arg PLUGINS="frontend|sqlalchemy|buienradar|dsmr_reader" \
-      --tag lansible/homeassistant:0.90.2
+      --tag lansible/home-assistant:0.90.2
 ```
 The arguments are:
 
