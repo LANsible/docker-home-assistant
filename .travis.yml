@@ -37,6 +37,7 @@ script:
       --build-arg VERSION=${HOMEASSISTANT_VERSION}
       --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
       --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
+  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker push ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}
 
   # Build homeassistant container
