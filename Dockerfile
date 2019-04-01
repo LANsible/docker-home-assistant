@@ -6,7 +6,7 @@ LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
 ARG VERSION=0.90.2
-ARG PLUGINS="frontend|sqlalchemy"
+ARG PLUGINS="frontend|sqlalchemy|aiohttp_cors"
 
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
@@ -33,7 +33,7 @@ RUN sed '/^$/q' /tmp/requirements_all.txt > /tmp/requirements_core.txt && \
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
     pip3 install --no-cache-dir --user --no-warn-script-location -r /tmp/requirements_core.txt -r /tmp/requirements_plugins_filtered.txt && \
-    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}" mysqlclient
+    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}" pymysql
 
 # Tricks to allow readonly container
 # Create deps directory so HA does not
