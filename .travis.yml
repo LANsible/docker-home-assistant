@@ -7,7 +7,7 @@ env:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
     - CONTAINER_NAME=home-assistant
-    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors"
+    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors|buienradar"
 
 services:
   - docker
@@ -16,12 +16,15 @@ matrix:
   include:
     # amd64
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=amd64
+    - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=amd64
 
     # arm64
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=arm64
+    - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=arm64
 
     # i386
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=i386
+    - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=i386
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
