@@ -17,14 +17,17 @@ matrix:
     # amd64
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=amd64
     - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=amd64
+    - env: HOMEASSISTANT_VERSION=0.91.1 ARCH=amd64
 
     # arm64
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=arm64
     - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=arm64
+    - env: HOMEASSISTANT_VERSION=0.91.1 ARCH=arm64
 
     # i386
     - env: HOMEASSISTANT_VERSION=0.90.2 ARCH=i386
     - env: HOMEASSISTANT_VERSION=0.91.0 ARCH=i386
+    - env: HOMEASSISTANT_VERSION=0.91.1 ARCH=i386
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset

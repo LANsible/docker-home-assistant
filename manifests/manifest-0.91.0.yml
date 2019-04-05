@@ -1,7 +1,5 @@
 ---
 image: lansible/home-assistant:0.91.0
-tags:
-  - latest
 manifests:
   - image: lansible/home-assistant:0.91.0-amd64
     platform:
