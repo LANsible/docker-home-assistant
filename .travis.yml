@@ -36,18 +36,6 @@ script:
     else
       ALPINE_ARCH="${ARCH}";
     fi
-  # Build and push builder for faster image builds
-  # https://github.com/moby/moby/issues/3471
-  - docker build .
-      --target builder
-      --build-arg ARCH=${ALPINE_ARCH}
-      --build-arg VERSION=${VERSION}
-      --build-arg PLUGINS=${PLUGINS}
-      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder
-      --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder
-  - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-  - docker push ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}
-
   # Build homeassistant container
   - docker build .
       --build-arg ARCH=${ALPINE_ARCH}
