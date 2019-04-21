@@ -15,13 +15,13 @@ services:
 matrix:
   include:
     # amd64
-    - env: HOMEASSISTANT_VERSION=0.91.4 ARCH=amd64
+    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=amd64
 
     # arm64
-    - env: HOMEASSISTANT_VERSION=0.91.4 ARCH=arm64
+    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=arm64
 
     # i386
-    - env: HOMEASSISTANT_VERSION=0.91.4 ARCH=i386
+    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=386
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
