@@ -15,45 +15,46 @@ services:
 matrix:
   include:
     # amd64
-    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=amd64
+    - env: VERSION=${TRAVIS_TAG:-0.91.4} ARCH=amd64
 
     # arm64
-    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=arm64
+    - env: VERSION=${TRAVIS_TAG:-0.91.4} ARCH=arm64
 
     # i386
-    - env: HOMEASSISTANT_VERSION=${TRAVIS_TAG:-0.91.4} ARCH=386
+    - env: VERSION=${TRAVIS_TAG:-0.91.4} ARCH=386
 
 before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   # Pipe to true since the tag could be non existing
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH} || true
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder || true
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH} || true
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder || true
 
 script:
-  # Build and push builder for faster image builds
-  # https://github.com/moby/moby/issues/3471
+  # Needed for naming difference between manifest-tool and Alpine multiarch image
   - if [ "${ARCH}" == '386' ]; then
       ALPINE_ARCH=i386;
     else
       ALPINE_ARCH="${ARCH}";
     fi
+  # Build and push builder for faster image builds
+  # https://github.com/moby/moby/issues/3471
   - docker build .
       --target builder
       --build-arg ARCH=${ALPINE_ARCH}
-      --build-arg VERSION=${HOMEASSISTANT_VERSION}
+      --build-arg VERSION=${VERSION}
       --build-arg PLUGINS=${PLUGINS}
-      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder
-      --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder
+      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder
+      --tag ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder
   - echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
   - docker push ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}
 
   # Build homeassistant container
   - docker build .
       --build-arg ARCH=${ALPINE_ARCH}
-      --build-arg VERSION=${HOMEASSISTANT_VERSION}
+      --build-arg VERSION=${VERSION}
       --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
-      --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}
-      --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}
+      --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
+      --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
 
 #TODO: Write a test stage
 
