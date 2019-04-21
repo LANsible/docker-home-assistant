@@ -27,7 +27,7 @@ before_script:
   - docker run --rm --privileged multiarch/qemu-user-static:register --reset
   # Pipe to true since the tag could be non existing
   - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH} || true
-  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}-builder || true
+  - docker pull ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:latest || true
 
 script:
   # Needed for naming difference between manifest-tool and Alpine multiarch image
@@ -40,7 +40,7 @@ script:
   - docker build .
       --build-arg ARCH=${ALPINE_ARCH}
       --build-arg VERSION=${VERSION}
-      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
+      --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:latest
       --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
       --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
 
