@@ -49,7 +49,7 @@ script:
 
   # Build homeassistant container
   - docker build .
-      --build-arg ARCH=${ARCH}
+      --build-arg ARCH=${ALPINE_ARCH}
       --build-arg VERSION=${HOMEASSISTANT_VERSION}
       --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:builder-${ARCH}
       --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}
