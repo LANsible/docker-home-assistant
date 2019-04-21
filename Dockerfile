@@ -69,6 +69,10 @@ COPY --from=builder --chown=8123:8123 /home/hass /home/hass
 COPY --from=builder \
     /usr/lib/libssl.so.45 \
     /usr/lib/libcrypto.so.43 \
+    /usr/lib/libpq.so.5 \
+    /usr/lib/libldap_r-2.4.so.2 \
+	/usr/lib/liblber-2.4.so.2 \
+	/usr/lib/libsasl2.so.3 \
     /lib/
 
 RUN apk add --no-cache \
