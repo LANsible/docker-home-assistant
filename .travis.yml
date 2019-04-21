@@ -7,7 +7,7 @@ env:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
     - CONTAINER_NAME=home-assistant
-    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors|psycopg2|buienradar"
+    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors|buienradar"
 
 services:
   - docker
