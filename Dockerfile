@@ -5,7 +5,7 @@ FROM multiarch/alpine:${ARCH}-v3.9 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG VERSION=0.90.2
+ARG VERSION
 ARG PLUGINS="frontend|sqlalchemy|aiohttp_cors"
 
 # Run all make job simultaneously

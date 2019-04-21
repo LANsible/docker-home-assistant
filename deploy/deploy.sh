@@ -9,12 +9,14 @@ chmod +x manifest-tool
 
 echo "Deploying manifest for ${HOMEASSISTANT_VERSION}"
 ./manifest-tool push from-args \
+    --ignore-missing \
     --platforms linux/amd64,linux/arm64,linux/386 \
     --template lansible/home-assistant:${HOMEASSISTANT_VERSION}-ARCH \
     --target lansible/home-assistant:${HOMEASSISTANT_VERSION}
 
 echo "Deploying manifest for latest"
 ./manifest-tool push from-args \
+    --ignore-missing \
     --platforms linux/amd64,linux/arm64,linux/386 \
     --template lansible/home-assistant:${HOMEASSISTANT_VERSION}-ARCH \
     --target lansible/home-assistant:latest
