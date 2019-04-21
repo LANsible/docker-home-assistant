@@ -21,8 +21,7 @@ RUN apk add --no-cache \
         gcc \
         musl-dev \
         libressl-dev \
-        make \
-        mariadb-dev
+        make
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
