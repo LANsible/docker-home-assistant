@@ -32,9 +32,14 @@ before_script:
 script:
   # Build and push builder for faster image builds
   # https://github.com/moby/moby/issues/3471
+  - if [ "${ARCH}" == '386' ]; then
+      ALPINE_ARCH=i386
+    else
+      ALPINE_ARCH="${ARCH}"
+    fi
   - docker build .
       --target builder
-      --build-arg ARCH=${ARCH}
+      --build-arg ARCH=${ALPINE_ARCH}
       --build-arg VERSION=${HOMEASSISTANT_VERSION}
       --build-arg PLUGINS=${PLUGINS}
       --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:${HOMEASSISTANT_VERSION}-${ARCH}-builder
