@@ -41,7 +41,8 @@ RUN pip3 install --upgrade --user --no-cache-dir pip && \
 RUN mkdir -p /home/hass/deps && \
     echo ${VERSION} >> /home/hass/.HA_VERSION && \
     mkdir /config && \
-    ln -sf /config/configuration.yaml /home/hass/configuration.yaml
+    ln -sf /config/configuration.yaml /home/hass/configuration.yaml && \
+    ln -sf /dev/shm /home/hass/.storage
 
 FROM multiarch/alpine:${ARCH}-v3.9
 
