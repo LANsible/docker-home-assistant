@@ -7,7 +7,12 @@ env:
     - fast_finish: true
     - DOCKER_NAMESPACE=lansible
     - CONTAINER_NAME=home-assistant
-    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors|buienradar"
+    # First line is bare minimum
+    # netdisco: Needed for discovery
+    # pydispatch: Needed for zwave
+    - PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors
+                |netdisco
+                |buienradar"
 
 services:
   - docker
