@@ -11,10 +11,10 @@ env:
     # netdisco: Needed for discovery
     # paho: Needed for mqtt
     # pydispatch: Needed for zwave
-    - 'PLUGINS="frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors\
+    - "PLUGINS=frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors\
                 |netdisco\
                 |paho\
-                |buienradar"'
+                |buienradar"
 
 services:
   - docker
