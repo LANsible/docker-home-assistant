@@ -93,6 +93,7 @@ COPY --from=builder \
     /usr/lib/libldap_r-2.4.so.2 \
     /usr/lib/liblber-2.4.so.2 \
     /usr/lib/libsasl2.so.3 \
+    /usr/lib/libudev.so.1 \
     /lib/
 
 RUN apk add --no-cache \
