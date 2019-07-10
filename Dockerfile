@@ -34,7 +34,7 @@ ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/
 # https://stackoverflow.com/a/39729735 && https://stackoverflow.com/a/39384347
 # Finally when OTHER is specified grep those and add to requirements
 RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requirements.txt && \
-    export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|component./g') && \
+    export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
     awk -v RS= '$0~ENVIRON["COMPONENTS"]' /tmp/requirements_all.txt >> /tmp/requirements.txt && \
     if [ -n "${OTHER}" ]; then \
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
