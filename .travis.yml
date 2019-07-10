@@ -48,7 +48,8 @@ script:
   - docker build .
       --build-arg ARCH=${ALPINE_ARCH}
       --build-arg VERSION=${VERSION}
-      --build-arg PLUGINS=${PLUGINS}
+      --build-arg COMPONENTS=${COMPONENTS}
+      --build-arg OTHER=${OTHER}
       --cache-from ${DOCKER_NAMESPACE}dump/${CONTAINER_NAME}:latest
       --cache-from ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
       --tag ${DOCKER_NAMESPACE}/${CONTAINER_NAME}:${VERSION}-${ARCH}
