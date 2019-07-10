@@ -32,13 +32,16 @@ ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/
 # https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
 # Match the components in the comment string and select until the newline
 # https://stackoverflow.com/a/39729735 && https://stackoverflow.com/a/39384347
-# Finally when OTHER is specified grep those and add to requirements
+# When OTHER is specified grep those and add to requirements
+# Finally add home-assistant and postgreslibs to requirements.
+# Needed in file since pip install -r /tmp/requirements.txt home-assistant simply ignores the -r option
 RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requirements.txt && \
     export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
     awk -v RS= '$0~ENVIRON["COMPONENTS"]' /tmp/requirements_all.txt >> /tmp/requirements.txt && \
     if [ -n "${OTHER}" ]; then \
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
-    fi;
+    fi; \
+    echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt
 
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
@@ -46,9 +49,7 @@ RUN pip3 install --upgrade --user --no-cache-dir pip && \
       --no-cache-dir \
       --user \
       --no-warn-script-location \
-      -r /tmp/requirements.txt \
-      homeassistant=="${VERSION}" \
-      psycopg2
+      -r /tmp/requirements.txt
 
 # Tricks to allow readonly container
 # Create deps directory so HA does not
