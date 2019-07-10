@@ -22,8 +22,10 @@ RUN apk add --no-cache \
         gcc \
         musl-dev \
         libressl-dev \
+        make \
         postgresql-dev \
-        make
+        g++ \
+        openzwave-dev
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
@@ -74,7 +76,8 @@ COPY --from=builder \
     /etc/
 
 # Copy Python modules
-COPY --from=builder --chown=8123:8123 /root/.local/lib/python3.6/site-packages/ ${HOME}/.local/lib/python3.6/site-packages/
+COPY --from=builder --chown=8123:8123 \
+    /root/.local/lib/python3.6/site-packages/ ${HOME}/.local/lib/python3.6/site-packages/
 
 # Copy pip installed binaries
 COPY --from=builder --chown=8123:8123 /root/.local/bin ${HOME}/.local/bin
@@ -88,8 +91,8 @@ COPY --from=builder \
     /usr/lib/libcrypto.so.43 \
     /usr/lib/libpq.so.5 \
     /usr/lib/libldap_r-2.4.so.2 \
-	/usr/lib/liblber-2.4.so.2 \
-	/usr/lib/libsasl2.so.3 \
+    /usr/lib/liblber-2.4.so.2 \
+    /usr/lib/libsasl2.so.3 \
     /lib/
 
 RUN apk add --no-cache \
