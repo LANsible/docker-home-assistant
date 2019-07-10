@@ -11,10 +11,16 @@ env:
     # netdisco: Needed for discovery
     # paho: Needed for mqtt
     # pydispatch: Needed for zwave
+    # buienradar: Needed for buienradar
+    # denonavr: Needed for denonavr media_player
+    # plex: Needed for plex media_player and sensor
     - "PLUGINS='frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors\
                 |netdisco\
                 |paho\
-                |buienradar'"
+                |pydispatch\
+                |buienradar\
+                |denonavr\
+                |plex'"
 
 services:
   - docker
