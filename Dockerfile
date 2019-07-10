@@ -5,8 +5,9 @@ FROM multiarch/alpine:${ARCH}-v3.9 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG VERSION
-ARG PLUGINS="frontend|sqlalchemy|aiohttp_cors"
+ARG VERSION="0.91.4"
+ARG COMPONENTS="frontend|recorder|http"
+ARG OTHER
 
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
@@ -26,14 +27,28 @@ RUN apk add --no-cache \
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
-RUN sed '/^$/q' /tmp/requirements_all.txt > /tmp/requirements_core.txt && \
-    sed '1,/^$/d' /tmp/requirements_all.txt > /requirements_plugins.txt && \
-    egrep -e "${PLUGINS}" /requirements_plugins.txt | grep -v '#' > /tmp/requirements_plugins_filtered.txt
+# First filter core requirements from a file by selecting comment header until empty line
+# Prefix all components with component to avoid matching packages containing a component name (yi for example)
+# https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
+# Match the components in the comment string and select until the newline
+# https://stackoverflow.com/a/39729735 && https://stackoverflow.com/a/39384347
+# Finally when OTHER is specified grep those and add to requirements
+RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requirements.txt && \
+    export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|component./g') && \
+    awk -v RS= '$0~ENVIRON["COMPONENTS"]' /tmp/requirements_all.txt >> /tmp/requirements.txt && \
+    if [ -n "${OTHER}" ]; then \
+      awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
+    fi;
 
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
-    pip3 install --no-cache-dir --user --no-warn-script-location -r /tmp/requirements_core.txt -r /tmp/requirements_plugins_filtered.txt && \
-    pip3 install --no-cache-dir --user --no-warn-script-location homeassistant=="${VERSION}" psycopg2
+    pip3 install \
+      --no-cache-dir \
+      --user \
+      --no-warn-script-location \
+      -r /tmp/requirements.txt \
+      homeassistant=="${VERSION}" \
+      psycopg2
 
 # Tricks to allow readonly container
 # Create deps directory so HA does not

@@ -8,19 +8,14 @@ env:
     - DOCKER_NAMESPACE=lansible
     - CONTAINER_NAME=home-assistant
     # First line is bare minimum
-    # netdisco: Needed for discovery
-    # paho: Needed for mqtt
-    # pydispatch: Needed for zwave
-    # buienradar: Needed for buienradar
-    # denonavr: Needed for denonavr media_player
-    # plex: Needed for plex media_player and sensor
-    - "PLUGINS='frontend|pyotp|PyQRCode|sqlalchemy|aiohttp_cors\
-                |netdisco\
-                |paho\
-                |pydispatch\
+    - "COMPONENTS='frontend|recorder|http\
+                |discovery\
+                |mqtt\
+                |zwave\
                 |buienradar\
                 |denonavr\
                 |plex'"
+    - OTHER='auth.mfa_modules.totp'
 
 services:
   - docker

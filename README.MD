@@ -20,7 +20,7 @@ This container only includes plugins which I use ;)
 
 You can easily add plugins to the container by forking the repository and running your own build.
 
-* Change are the `DOCKER_NAMESPACE` and `PLUGINS` variables in the .travis.yml file.
+* Change are the `DOCKER_NAMESPACE` and `COMPONENTS` variables in the .travis.yml file.
 * Enable the repository on travis.org
 * Add `DOCKER_USERNAME` and `DOCKER_PASSWORD` to the environment variables on travis.org
 
@@ -32,24 +32,14 @@ You could build the container locally to add plugins. It works like this:
 docker build . \
       --build-arg ARCH=amd64 \
       --build-arg VERSION=0.90.2 \
-      --build-arg PLUGINS="frontend|sqlalchemy|buienradar|dsmr_reader" \
+      --build-arg COMPONENTS="frontend|mqtt"
       --tag lansible/home-assistant:0.90.2
 ```
 The arguments are:
 
-| Build argument | Description                                    | Example                 |
-|----------------|------------------------------------------------|-------------------------|
-| `ARCH`         | Architecture to build (amd64, arm64, i386)     | `amd64`                 |
-| `VERSION`      | Version of Home Assistant                      | `0.90.2`                |
-| `PLUGINS`      | List of pip plugins separated by a pipe symbol | `"frontend|sqlalchemy"` |
-
-To speed up the build the builder part of the Dockerfile is available to use the cache from:
-
-```bash
-docker build . \
-      --build-arg ARCH=amd64
-      --build-arg VERSION=0.90.2
-      --build-arg PLUGINS="buienradar|dsmr_reader"
-      --cache-from lansibledump/homeassistant:0.90.2-amd64-builder
-      --tag lansibledump/homeassistant:0.90.2
-```
+| Build argument | Description                                    | Example                   |
+|----------------|------------------------------------------------|---------------------------|
+| `ARCH`         | Architecture to build (amd64, arm64, i386)     | `amd64`                   |
+| `VERSION`      | Version of Home Assistant                      | `0.90.2`                  |
+| `COMPONENTS`   | List of components to install plugins for      | `"frontend|mqtt"`         |
+| `OTHER`        | List of other (not component) parts to install | `"auth.mfa_modules.totp"` |
