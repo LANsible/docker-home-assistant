@@ -45,7 +45,9 @@ script:
       ALPINE_ARCH="${ARCH}";
     fi
   # Build homeassistant container
-  - docker build .
+  # travis_wait is needed for the arm64 build
+  - travis_wait 60
+    docker build .
       --build-arg ARCH=${ALPINE_ARCH}
       --build-arg VERSION=${VERSION}
       --build-arg COMPONENTS=${COMPONENTS}
