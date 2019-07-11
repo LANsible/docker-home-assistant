@@ -79,9 +79,6 @@ steps:
     platforms:
       - linux/amd64
       - linux/arm64
-  when:
-    branch:
-    - master
 
 - name: manifest-latest
   image: plugins/manifest
