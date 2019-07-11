@@ -1,7 +1,7 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
 # ARG ARCH=amd64
 # FROM multiarch/alpine:${ARCH}-v3.9 as builder
-FROM alpine:3.10
+FROM alpine:3.10 as builder
 
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
