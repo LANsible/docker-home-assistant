@@ -1,6 +1,7 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-ARG ARCH=amd64
-FROM multiarch/alpine:${ARCH}-v3.9 as builder
+# ARG ARCH=amd64
+# FROM multiarch/alpine:${ARCH}-v3.9 as builder
+FROM alpine:3.10
 
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
@@ -62,7 +63,8 @@ RUN mkdir -p /home/hass/deps && \
     ln -sf /config/configuration.yaml /home/hass/configuration.yaml && \
     ln -sf /dev/shm /home/hass/.storage
 
-FROM multiarch/alpine:${ARCH}-v3.9
+# FROM multiarch/alpine:${ARCH}-v3.9
+FROM alpine:3.10
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/home/hass
