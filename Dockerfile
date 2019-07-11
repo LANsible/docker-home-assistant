@@ -44,7 +44,11 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
     if [ -n "${OTHER}" ]; then \
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
     fi; \
-    echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt
+    if [ "${VERSION}" == "master" ]; then \
+      echo -e "https://github.com/home-assistant/home-assistant/archive/master.zip\npsycopg2" >> /tmp/requirements.txt; \
+    else \
+      echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
+    fi;
 
 # Install requirements and Home Assistant
 RUN pip3 install --upgrade --user --no-cache-dir pip && \
