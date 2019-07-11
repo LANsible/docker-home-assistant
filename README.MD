@@ -2,8 +2,8 @@
 
 [![Build Status](https://cloud.drone.io/api/badges/LANsible/docker-home-assistant/status.svg)](https://cloud.drone.io/LANsible/docker-home-assistant)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lansible/home-assistant.svg)](https://hub.docker.com/r/lansible/hoem-assistant)
-[![Docker version](https://images.microbadger.com/badges/version/lansible/home-assistant:master-arm64.svg)](https://microbadger.com/images/lansible/home-assistant:master-arm64)
-[![Docker Size/Layers](https://images.microbadger.com/badges/image/lansible/home-assistant:master-arm64.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
+[![Docker Version](https://images.microbadger.com/badges/version/lansible/home-assistant:latest.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
+[![Docker Size/Layers](https://images.microbadger.com/badges/image/lansible/home-assistant:latest.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
 
 ## Why not use the official container?
 
@@ -35,16 +35,19 @@ You could build the container locally to add plugins. It works like this:
 
 ```bash
 docker build . \
-      --build-arg ARCH=amd64 \
       --build-arg VERSION=0.90.2 \
       --build-arg COMPONENTS="frontend|mqtt"
+      --build-arg OTHER="auth.mfa_modules.totp"
       --tag lansible/home-assistant:0.90.2
 ```
 The arguments are:
 
 | Build argument | Description                                    | Example                   |
 |----------------|------------------------------------------------|---------------------------|
-| `ARCH`         | Architecture to build (amd64, arm64, i386)     | `amd64`                   |
 | `VERSION`      | Version of Home Assistant                      | `0.90.2`                  |
 | `COMPONENTS`   | List of components to install plugins for      | `"frontend|mqtt"`         |
 | `OTHER`        | List of other (not component) parts to install | `"auth.mfa_modules.totp"` |
+
+## Credits
+
+* [home-assistant/home-assistant](https://github.com/home-assistant/home-assistant)
