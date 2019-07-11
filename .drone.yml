@@ -16,7 +16,6 @@ steps:
       from_secret: DOCKER_PASSWORD
     repo: lansible/home-assistant
     build_args:
-      - ARCH=amd64
       - VERSION=${DRONE_TAG:-master}
       # First line is bare minimum
       - "COMPONENTS='frontend|recorder|http\
@@ -47,7 +46,6 @@ steps:
       from_secret: DOCKER_PASSWORD
     repo: lansible/home-assistant
     build_args:
-      - ARCH=arm64
       - VERSION=${DRONE_TAG:-master}
       # First line is bare minimum
       - "COMPONENTS='frontend|recorder|http\
@@ -59,3 +57,52 @@ steps:
                       |plex'"
       - OTHER='auth.mfa_modules.totp'
     tags: ${DRONE_TAG:-master}-arm64
+
+---
+kind: pipeline
+name: manifest
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: manifest-versioned
+  image: plugins/manifest
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    target: lansible/home-assistant:${DRONE_TAG:-master}
+    template: lansible/home-assistant:${DRONE_TAG:-master}-ARCH
+    platforms:
+      - linux/amd64
+      - linux/arm64
+  when:
+    branch:
+    - master
+
+- name: manifest-latest
+  image: plugins/manifest
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    target: lansible/home-assistant:latest
+    template: lansible/home-assistant:${DRONE_TAG:-master}-ARCH
+    platforms:
+      - linux/amd64
+      - linux/arm64
+  when:
+    event:
+    - tag
+
+depends_on:
+- amd64
+- arm64
+
+trigger:
+  branch:
+  - master
