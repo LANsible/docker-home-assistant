@@ -1,0 +1,61 @@
+---
+kind: pipeline
+name: amd64
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    repo: lansible/home-assistant
+    build_args:
+      - ARCH=amd64
+      - VERSION=${DRONE_TAG:-master}
+      # First line is bare minimum
+      - "COMPONENTS='frontend|recorder|http\
+                      |discovery\
+                      |mqtt\
+                      |zwave\
+                      |buienradar\
+                      |denonavr\
+                      |plex'"
+      - OTHER='auth.mfa_modules.totp'
+    tags: ${DRONE_TAG:-master}-amd64
+
+---
+kind: pipeline
+name: arm64
+
+platform:
+  os: linux
+  arch: arm64
+
+steps:
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: DOCKER_USERNAME
+    password:
+      from_secret: DOCKER_PASSWORD
+    repo: lansible/home-assistant
+    build_args:
+      - ARCH=arm64
+      - VERSION=${DRONE_TAG:-master}
+      # First line is bare minimum
+      - "COMPONENTS='frontend|recorder|http\
+                      |discovery\
+                      |mqtt\
+                      |zwave\
+                      |buienradar\
+                      |denonavr\
+                      |plex'"
+      - OTHER='auth.mfa_modules.totp'
+    tags: ${DRONE_TAG:-master}-arm64
