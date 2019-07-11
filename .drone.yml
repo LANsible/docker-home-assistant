@@ -102,9 +102,3 @@ steps:
 depends_on:
 - amd64
 - arm64
-
-trigger:
-  branch:
-  - master
-  event:
-  - tag
