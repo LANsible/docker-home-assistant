@@ -106,3 +106,5 @@ depends_on:
 trigger:
   branch:
   - master
+  event:
+  - tag
