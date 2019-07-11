@@ -83,7 +83,7 @@ COPY --from=builder \
 
 # Copy Python modules
 COPY --from=builder --chown=8123:8123 \
-    /root/.local/lib/python3.6/site-packages/ ${HOME}/.local/lib/python3.6/site-packages/
+    /root/.local/lib/python3.7/site-packages/ ${HOME}/.local/lib/python3.7/site-packages/
 
 # Copy pip installed binaries
 COPY --from=builder --chown=8123:8123 /root/.local/bin ${HOME}/.local/bin
@@ -93,12 +93,12 @@ COPY --from=builder --chown=8123:8123 /home/hass /home/hass
 
 # Copy needed libs from builder
 COPY --from=builder \
-    /usr/lib/libssl.so.45 \
     /usr/lib/libcrypto.so.43 \
-    /usr/lib/libpq.so.5 \
-    /usr/lib/libldap_r-2.4.so.2 \
     /usr/lib/liblber-2.4.so.2 \
+    /usr/lib/libldap_r-2.4.so.2 \
+    /usr/lib/libpq.so.5 \
     /usr/lib/libsasl2.so.3 \
+    /usr/lib/libssl.so.45 \
     /usr/lib/libudev.so.1 \
     /lib/
 
