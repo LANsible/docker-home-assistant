@@ -1,5 +1,10 @@
 # Home Assistant / HASS in Docker!
 
+[![Build Status](https://cloud.drone.io/api/badges/LANsible/docker-home-assistant/status.svg)](https://cloud.drone.io/LANsible/docker-home-assistant)
+[![Docker Pulls](https://img.shields.io/docker/pulls/lansible/home-assistant.svg)](https://hub.docker.com/r/lansible/hoem-assistant)
+[![Docker version](https://images.microbadger.com/badges/version/lansible/home-assistant:master-arm64.svg)](https://microbadger.com/images/lansible/home-assistant:master-arm64)
+[![Docker Size/Layers](https://images.microbadger.com/badges/image/lansible/home-assistant:master-arm64.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
+
 ## Why not use the official container?
 
 It does not work on Kubernetes with a configmap since it tries to create the deps folder where the config is mounted.
