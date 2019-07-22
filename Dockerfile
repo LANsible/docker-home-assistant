@@ -14,7 +14,8 @@ ARG OTHER
 ENV MAKEFLAGS=-j
 
 RUN addgroup -S -g 8123 hass 2>/dev/null && \
-    adduser -S -u 8123 -D -H -h /home/hass -s /sbin/nologin -G hass -g hass hass 2>/dev/null
+    adduser -S -u 8123 -D -H -h /home/hass -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
+    addgroup hass dialout
 
 RUN apk add --no-cache \
         git \
