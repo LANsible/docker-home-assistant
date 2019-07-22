@@ -101,6 +101,7 @@ COPY --from=builder \
     /usr/lib/libssl.so.45 \
     /usr/lib/libudev.so.1 \
     "/usr/lib/libstdc++.so.6" \
+    /usr/lib/libgcc_s.so.1 \
     /lib/
 
 RUN apk add --no-cache \
