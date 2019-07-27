@@ -1,6 +1,4 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-# ARG ARCH=amd64
-# FROM multiarch/alpine:${ARCH}-v3.9 as builder
 FROM alpine:3.10 as builder
 
 LABEL maintainer="Wilmar den Ouden" \
@@ -14,7 +12,7 @@ ARG OTHER
 ENV MAKEFLAGS=-j
 
 RUN addgroup -S -g 8123 hass 2>/dev/null && \
-    adduser -S -u 8123 -D -H -h /home/hass -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
+    adduser -S -u 8123 -D -H -h /dev/shm -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
     addgroup hass dialout
 
 RUN apk add --no-cache \
@@ -59,22 +57,13 @@ RUN pip3 install --upgrade --user --no-cache-dir pip && \
       --no-warn-script-location \
       -r /tmp/requirements.txt
 
-# Tricks to allow readonly container
-# Create deps directory so HA does not
-# Create symlink to place where config should be mounted
-RUN mkdir -p /home/hass/deps && \
-    echo ${VERSION} >> /home/hass/.HA_VERSION && \
-    mkdir /config && \
-    ln -sf /config/configuration.yaml /home/hass/configuration.yaml && \
-    ln -sf /dev/shm /home/hass/.storage
-
 # FROM multiarch/alpine:${ARCH}-v3.9
 FROM alpine:3.10
 
 # Needs seperate otherwise not expanded in next ENV
-ENV HOME=/home/hass
+ENV HOME=/dev/shm
 # Adds user owned .local/bin to PATH
-ENV PATH=${HOME}/.local/bin:$PATH
+ENV PYTHONPATH=/opt/python3.7/site-packages
 
 # Copy users from builder
 COPY --from=builder \
@@ -84,13 +73,10 @@ COPY --from=builder \
 
 # Copy Python modules
 COPY --from=builder --chown=8123:8123 \
-    /root/.local/lib/python3.7/site-packages/ ${HOME}/.local/lib/python3.7/site-packages/
+    /root/.local/lib/python3.7/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
-COPY --from=builder --chown=8123:8123 /root/.local/bin ${HOME}/.local/bin
-
-# Copy config setup
-COPY --from=builder --chown=8123:8123 /home/hass /home/hass
+COPY --from=builder --chown=8123:8123 /root/.local/bin /usr/local/bin
 
 # Copy needed libs from builder
 COPY --from=builder \
@@ -105,9 +91,13 @@ COPY --from=builder \
     /usr/lib/libgcc_s.so.1 \
     /lib/
 
+# Add python3
 RUN apk add --no-cache \
     python3
 
+# Adds entrypoint
+COPY ./entrypoint.sh /entrypoint.sh
+
 USER hass
-ENTRYPOINT ["hass"]
-CMD ["--config=/home/hass/", "--log-file=/proc/self/fd/1", "--skip-pip"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["hass", "--config=/dev/shm", "--log-file=/proc/self/fd/1", "--skip-pip"]
