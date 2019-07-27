@@ -10,7 +10,7 @@
 
 # Skip when no config mounted, just run with defaults
 if [ -d "/config" ]; then
-    for file in /config; do
+    for file in /config/*; do
         ln -sf /config/$file /dev/shm/$file
     done
 fi
