@@ -11,7 +11,8 @@
 # Skip when no config mounted, just run with defaults
 if [ -d "/config" ]; then
     for file in /config/*; do
-        ln -sf /config/$file /dev/shm/$file
+        filename=$(basename $file)
+        ln -sf /config/$filename /dev/shm/$filename
     done
 fi
 
