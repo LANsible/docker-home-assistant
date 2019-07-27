@@ -7,3 +7,11 @@ services:
      - "8123:8123"
     volumes:
      - ./config:/config
+  
+  postgres:
+    image: postgres:11.4-alpine
+    environment:
+    - POSTGRES_USER=hass
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=home_assistant_db
+    - PGDATA=/var/lib/postgresql/data/pgdata

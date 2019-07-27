@@ -12,3 +12,7 @@ homeassistant:
   time_zone: Europe/Amsterdam
 
 frontend:
+
+# Set database path
+recorder:
+  db_url: postgresql://hass:password@postgres/home_assistant_db
