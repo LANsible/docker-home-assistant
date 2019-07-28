@@ -18,8 +18,8 @@ fi
 
 # Create symlink for .storage directory and HA_VERSION
 if [ -d "/data" ]; then
-    ln -sf /data /dev/shm/.storage
-    ln -sf /data/.HA_VERSION /dev/shm/.HA_VERSION
+    ln -sf /dev/shm/.storage /data
+    ln -sf /dev/shm/.HA_VERSION /data/.HA_VERSION
 fi
 
 # Start home assistant
