@@ -62,6 +62,7 @@ FROM alpine:3.10
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/dev/shm
+
 # Adds user owned .local/bin to PATH
 ENV PYTHONPATH=/opt/python3.7/site-packages
 
