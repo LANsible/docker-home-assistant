@@ -16,5 +16,10 @@ if [ -d "/config" ]; then
     done
 fi
 
+# Create symlink for .storage directory
+if [ -d "/data" ]; then
+    ln -sf /data /dev/shm/.storage
+fi
+
 # Start home assistant
 exec "$@"
