@@ -1,14 +1,23 @@
 ---
 version: "3.7"
 services:
+  volumes-provisioner:
+    image: hasnat/volumes-provisioner
+    environment:
+      PROVISION_DIRECTORIES: "1000:1000:0755:/data"
+    volumes:
+      - hass-data:/data
+
   homeassistant:
-    image: lansible/home-assistant:latest
+    image: lansible/home-assistant:master-amd64
     ports:
      - "8123:8123"
+    depends_on:
+      - volumes-provisioner
     volumes:
      - ./config:/config
      - hass-data:/data
-  
+
   postgres:
     image: postgres:11.4-alpine
     environment:
