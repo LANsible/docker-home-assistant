@@ -18,7 +18,7 @@ fi
 
 # Create symlink for .storage directory and HA_VERSION
 if [ -d "/data" ]; then
-    ln -sf /dev/shm/.storage /data
+    ln -sf /dev/shm/.storage /data/.storage
     ln -sf /dev/shm/.HA_VERSION /data/.HA_VERSION
 fi
 
