@@ -11,8 +11,8 @@ ARG OTHER
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
 
-RUN addgroup -S -g 8123 hass 2>/dev/null && \
-    adduser -S -u 8123 -D -H -h /dev/shm -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
+RUN addgroup -S -g 1000 hass 2>/dev/null && \
+    adduser -S -u 1000 -D -H -h /dev/shm -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
     addgroup hass dialout
 
 RUN apk add --no-cache \
@@ -73,11 +73,11 @@ COPY --from=builder \
     /etc/
 
 # Copy Python modules
-COPY --from=builder --chown=8123:8123 \
+COPY --from=builder --chown=1000:1000 \
     /root/.local/lib/python3.7/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
-COPY --from=builder --chown=8123:8123 /root/.local/bin /usr/local/bin
+COPY --from=builder --chown=1000:1000 /root/.local/bin /usr/local/bin
 
 # Copy needed libs from builder
 COPY --from=builder \
