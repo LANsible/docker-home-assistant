@@ -10,17 +10,29 @@
 
 # Skip when no config mounted, just run with defaults
 if [ -d "/config" ]; then
+  # For each config file create a symlink
   for file in /config/*; do
-    filename=$(basename $file)
-    ln -sf /config/$filename /dev/shm/$filename
+    filename=$(basename "$file")
+    # Create symlink when it does not exist yet
+    if [ ! -e "/dev/shm/$filename" ]; then
+      ln -sf "/config/$filename" "/dev/shm/$filename"
+    fi
   done
 fi
 
 # Create symlink for .storage directory and HA_VERSION
 if [ -d "/data" ]; then
+  # Create .storage dir when not already there
+  if [ -d "/data/.storage" ]; then
     mkdir /data/.storage
-    ln -sf /data/.storage /dev/shm/.storage
-    ln -sf /data/.HA_VERSION /dev/shm/.HA_VERSION
+  fi
+
+  # Create symlinks needed for persistance
+  for symlink in .storage .HA_VERSION; do
+    if [ ! -e $symlink ]; then
+      ln -sf "/data/$symlink" "/dev/shm/$symlink"
+    fi
+  done
 fi
 
 # Start home assistant
