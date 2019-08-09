@@ -10,10 +10,10 @@
 
 # Skip when no config mounted, just run with defaults
 if [ -d "/config" ]; then
-    for file in /config/*; do
-        filename=$(basename $file)
-        ln -sf /config/$filename /dev/shm/$filename
-    done
+  for file in /config/*; do
+    filename=$(basename $file)
+    ln -sf /config/$filename /dev/shm/$filename
+  done
 fi
 
 # Create symlink for .storage directory and HA_VERSION
