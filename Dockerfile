@@ -45,9 +45,9 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
     fi; \
     if [ "${VERSION}" = "master" ]; then \
-      echo "https://github.com/home-assistant/home-assistant/archive/master.zip\npsycopg2" >> /tmp/requirements.txt; \
+      echo -e "https://github.com/home-assistant/home-assistant/archive/master.zip\npsycopg2" >> /tmp/requirements.txt; \
     else \
-      echo "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
+      echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
     fi;
 
 # Install requirements and Home Assistant
