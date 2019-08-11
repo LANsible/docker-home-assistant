@@ -98,5 +98,6 @@ RUN apk add --no-cache \
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
 
+USER hass
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["hass", "--config=/dev/shm", "--log-file=/proc/self/fd/1", "--skip-pip"]
