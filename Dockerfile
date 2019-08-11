@@ -30,9 +30,6 @@ RUN apk add --no-cache \
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
 
-# See: https://github.com/hadolint/hadolint/wiki/DL4006
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-
 # First filter core requirements from a file by selecting comment header until empty line
 # Prefix all components with component to avoid matching packages containing a component name (yi for example)
 # https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
