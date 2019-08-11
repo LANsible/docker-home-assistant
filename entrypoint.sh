@@ -39,4 +39,4 @@ if [ -d "/data" ]; then
 fi
 
 # Start home assistant
-su-exec hass:hass "$@"
+exec "$@"

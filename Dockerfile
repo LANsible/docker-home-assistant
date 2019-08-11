@@ -29,6 +29,10 @@ RUN apk add --no-cache \
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
+
+# See: https://github.com/hadolint/hadolint/wiki/DL4006
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 # First filter core requirements from a file by selecting comment header until empty line
 # Prefix all components with component to avoid matching packages containing a component name (yi for example)
 # https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
@@ -43,10 +47,10 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
     if [ -n "${OTHER}" ]; then \
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
     fi; \
-    if [ "${VERSION}" == "master" ]; then \
-      echo -e "https://github.com/home-assistant/home-assistant/archive/master.zip\npsycopg2" >> /tmp/requirements.txt; \
+    if [ "${VERSION}" = "master" ]; then \
+      echo "https://github.com/home-assistant/home-assistant/archive/master.zip\npsycopg2" >> /tmp/requirements.txt; \
     else \
-      echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
+      echo "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
     fi;
 
 # Install requirements and Home Assistant
@@ -92,8 +96,7 @@ COPY --from=builder \
 
 # Add python3
 RUN apk add --no-cache \
-    python3 \
-    su-exec
+    python3
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
