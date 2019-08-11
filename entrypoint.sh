@@ -15,6 +15,7 @@ if [ -d "/config" ]; then
     filename=$(basename "$file")
     # Create symlink when it does not exist yet
     if [ ! -e "/dev/shm/$filename" ]; then
+      echo "Creating symlink from /config/$filename to /dev/shm/$filename"
       ln -sf "/config/$filename" "/dev/shm/$filename"
     fi
   done
@@ -23,13 +24,15 @@ fi
 # Create symlink for .storage directory and HA_VERSION
 if [ -d "/data" ]; then
   # Create .storage dir when not already there
-  if [ -d "/data/.storage" ]; then
+  if [ ! -d "/data/.storage" ]; then
+    echo "Creating /data/.storage directory"
     mkdir /data/.storage
   fi
 
   # Create symlinks needed for persistance
   for symlink in .storage .HA_VERSION; do
-    if [ ! -e $symlink ]; then
+    if [ ! -e "/dev/shm/$symlink" ]; then
+      echo "Creating symlink from /data/$symlink to /dev/shm/$symlink"
       ln -sf "/data/$symlink" "/dev/shm/$symlink"
     fi
   done
