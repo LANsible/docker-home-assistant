@@ -14,7 +14,7 @@ if [ -d "/config" ]; then
   for file in /config/*; do
     filename=$(basename "$file")
     # Create symlink when it does not exist yet
-    if [ ! -e "/dev/shm/$filename" ]; then
+    if [ ! -L "/dev/shm/$filename" ]; then
       echo "Creating symlink from /config/$filename to /dev/shm/$filename"
       ln -sf "/config/$filename" "/dev/shm/$filename"
     fi
@@ -31,7 +31,7 @@ if [ -d "/data" ]; then
 
   # Create symlinks needed for persistance
   for symlink in .storage .HA_VERSION; do
-    if [ ! -e "/dev/shm/$symlink" ]; then
+    if [ ! -L "/dev/shm/$symlink" ]; then
       echo "Creating symlink from /data/$symlink to /dev/shm/$symlink"
       ln -sf "/data/$symlink" "/dev/shm/$symlink"
     fi
@@ -39,4 +39,4 @@ if [ -d "/data" ]; then
 fi
 
 # Start home assistant
-exec "$@"
+su-exec hass:hass "$@"

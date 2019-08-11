@@ -57,13 +57,12 @@ RUN pip3 install --upgrade --user --no-cache-dir pip && \
       --no-warn-script-location \
       -r /tmp/requirements.txt
 
-# FROM multiarch/alpine:${ARCH}-v3.9
 FROM alpine:3.10
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/dev/shm
 
-# Adds user owned .local/bin to PATH
+# Set PYTHONPATH where to modules will be copied to
 ENV PYTHONPATH=/opt/python3.7/site-packages
 
 # Copy users from builder
@@ -73,11 +72,10 @@ COPY --from=builder \
     /etc/
 
 # Copy Python modules
-COPY --from=builder --chown=1000:1000 \
-    /root/.local/lib/python3.7/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.7/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
-COPY --from=builder --chown=1000:1000 /root/.local/bin /usr/local/bin
+COPY --from=builder /root/.local/bin /usr/local/bin
 
 # Copy needed libs from builder
 COPY --from=builder \
@@ -94,11 +92,11 @@ COPY --from=builder \
 
 # Add python3
 RUN apk add --no-cache \
-    python3
+    python3 \
+    su-exec
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
 
-USER hass
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["hass", "--config=/dev/shm", "--log-file=/proc/self/fd/1", "--skip-pip"]
