@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: home-assistant
+  namespace: automating
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: automating
+  labels:
+    app: home-assistant
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-assistant
+      tier: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+        tier: home-assistant
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: device
+                  operator: In
+                  values:
+                    - zwave-usb
+      serviceAccountName: home-assistant
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - image: lansible/home-assistant:latest
+          imagePullPolicy: Always
+          name: home-assistant
+          # Needed to read the tty device on the host
+          # Related: https://github.com/kubernetes/kubernetes/issues/60748
+          securityContext:
+            privileged: true
+          readinessProbe:
+            tcpSocket:
+              port: 8123
+          livenessProbe:
+            tcpSocket:
+              port: 8123
+          ports:
+            - containerPort: 8123
+              name: dash
+          volumeMounts:
+            - name: home-assistant-config
+              mountPath: /config
+            - name: home-assistant-data
+              mountPath: /data
+            - name: zwave-usb
+              mountPath: /dev/ttyACM0
+      volumes:
+        - name: home-assistant-config
+          configMap:
+            name: home-assistant-config
+        - name: home-assistant-data
+          hostPath:
+            path: /data/automating-home-assistant-home-assistant-data
+        - name: zwave-usb
+          hostPath:
+            path: /dev/serial/by-id/usb-0658_0200-if00
+            type: CharDevice
