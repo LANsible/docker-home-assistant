@@ -24,7 +24,9 @@ steps:
                       |zwave\
                       |buienradar\
                       |denonavr\
-                      |plex"
+                      |plex
+                      |opentherm_gw
+                      |flux"
       - OTHER=auth.mfa_modules.totp
     tags: ${DRONE_TAG:-master}-amd64
 
