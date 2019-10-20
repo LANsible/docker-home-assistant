@@ -51,8 +51,8 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
     fi;
 
 # Install requirements and Home Assistant
-RUN pip3 install --upgrade --user --no-cache-dir pip && \
-    pip3 install \
+# RUN pip3 install --upgrade --user --no-cache-dir pip && \
+RUN pip3 install \
       --no-cache-dir \
       --user \
       --no-warn-script-location \
