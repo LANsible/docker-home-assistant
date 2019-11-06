@@ -21,7 +21,6 @@ steps:
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
                       |mqtt\
-                      |zwave\
                       |buienradar\
                       |denonavr\
                       |plex\
