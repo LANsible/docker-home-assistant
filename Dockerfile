@@ -23,9 +23,7 @@ RUN apk add --no-cache \
         musl-dev \
         libressl-dev \
         make \
-        postgresql-dev \
-        g++ \
-        openzwave-dev
+        postgresql-dev
 
 # Setup requirements files
 ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
@@ -51,7 +49,6 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
     fi;
 
 # Install requirements and Home Assistant
-# RUN pip3 install --upgrade --user --no-cache-dir pip && \
 RUN pip3 install \
       --no-cache-dir \
       --user \
@@ -86,9 +83,6 @@ COPY --from=builder \
     /usr/lib/libpq.so.5 \
     /usr/lib/libsasl2.so.3 \
     /usr/lib/libssl.so.45 \
-    /usr/lib/libudev.so.1 \
-    "/usr/lib/libstdc++.so.6" \
-    /usr/lib/libgcc_s.so.1 \
     /lib/
 
 # Add python3
@@ -99,5 +93,6 @@ RUN apk add --no-cache \
 COPY ./entrypoint.sh /entrypoint.sh
 
 USER hass
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/busybox", "ash", "/entrypoint.sh" ]
 CMD ["hass", "--config=/dev/shm", "--log-file=/proc/self/fd/1", "--skip-pip"]
+EXPOSE 8123

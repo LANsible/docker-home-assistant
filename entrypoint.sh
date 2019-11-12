@@ -8,35 +8,31 @@
 
 # Also hass makes /deps dir, HA_VERSION file and onboarding file
 
-# Skip when no config mounted, just run with defaults
+# Create aliases to busybox
+alias basename="/bin/busybox basename"
+alias ln="/bin/busybox ln"
+alias mkdir="/bin/busybox mkdir"
+
+# Create symlinks when config mounted, else exit
+if [ ! -d "/data" ]; then
+  echo "No /data found, please data volume to container"
+  exit 1
+fi
+
 if [ -d "/config" ]; then
   # For each config file create a symlink
   for file in /config/*; do
     filename=$(basename "$file")
     # Create symlink when it does not exist yet
-    if [ ! -L "/dev/shm/$filename" ]; then
-      echo "Creating symlink from /config/$filename to /dev/shm/$filename"
-      ln -sf "/config/$filename" "/dev/shm/$filename"
+    if [ ! -L "/data/$filename" ]; then
+      echo "Creating symlink from /config/$filename to /data/$filename"
+      ln -sf "/config/$filename" "/data/$filename"
     fi
   done
+else 
+  # Print warning when no config was found, could be intentional
+  echo "No /config found, no symlink will be created"
 fi
 
-# Create symlink for .storage directory and HA_VERSION
-if [ -d "/data" ]; then
-  # Create .storage dir when not already there
-  if [ ! -d "/data/.storage" ]; then
-    echo "Creating /data/.storage directory"
-    mkdir /data/.storage
-  fi
-
-  # Create symlinks needed for persistance
-  for symlink in .storage .HA_VERSION; do
-    if [ ! -L "/dev/shm/$symlink" ]; then
-      echo "Creating symlink from /data/$symlink to /dev/shm/$symlink"
-      ln -sf "/data/$symlink" "/dev/shm/$symlink"
-    fi
-  done
-fi
-
-# Start home assistant
+# Start docker CMD
 exec "$@"
