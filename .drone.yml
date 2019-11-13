@@ -23,7 +23,7 @@ steps:
                       |mqtt\
                       |buienradar\
                       |denonavr\
-                      |plex\
+                      |androidtv\
                       |opentherm_gw\
                       |flux"
       - OTHER=auth.mfa_modules.totp
@@ -52,10 +52,9 @@ steps:
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
                       |mqtt\
-                      |zwave\
                       |buienradar\
                       |denonavr\
-                      |plex\
+                      |androidtv\
                       |opentherm_gw\
                       |flux"
       - OTHER=auth.mfa_modules.totp
