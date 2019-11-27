@@ -16,7 +16,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     repo: lansible/home-assistant
     build_args:
-      - VERSION=${DRONE_TAG:-master}
+      - VERSION=${DRONE_TAG:-dev}
       # First line is bare minimum
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
@@ -27,7 +27,7 @@ steps:
                       |opentherm_gw\
                       |flux"
       - OTHER=auth.mfa_modules.totp
-    tags: ${DRONE_TAG:-master}-amd64
+    tags: ${DRONE_TAG:-dev}-amd64
 
 ---
 kind: pipeline
@@ -47,7 +47,7 @@ steps:
       from_secret: DOCKER_PASSWORD
     repo: lansible/home-assistant
     build_args:
-      - VERSION=${DRONE_TAG:-master}
+      - VERSION=${DRONE_TAG:-dev}
       # First line is bare minimum
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
@@ -58,7 +58,7 @@ steps:
                       |opentherm_gw\
                       |flux"
       - OTHER=auth.mfa_modules.totp
-    tags: ${DRONE_TAG:-master}-arm64
+    tags: ${DRONE_TAG:-dev}-arm64
 
 ---
 kind: pipeline

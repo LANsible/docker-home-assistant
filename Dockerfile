@@ -4,7 +4,7 @@ FROM alpine:3.10 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG VERSION="master"
+ARG VERSION="dev"
 ARG COMPONENTS="frontend|recorder|http"
 ARG OTHER
 
