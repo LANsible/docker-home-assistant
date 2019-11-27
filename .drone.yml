@@ -76,8 +76,8 @@ steps:
       from_secret: DOCKER_USERNAME
     password:
       from_secret: DOCKER_PASSWORD
-    target: lansible/home-assistant:${DRONE_TAG:-master}
-    template: lansible/home-assistant:${DRONE_TAG:-master}-ARCH
+    target: lansible/home-assistant:${DRONE_TAG:-dev}
+    template: lansible/home-assistant:${DRONE_TAG:-dev}-ARCH
     platforms:
       - linux/amd64
       - linux/arm64
@@ -90,7 +90,7 @@ steps:
     password:
       from_secret: DOCKER_PASSWORD
     target: lansible/home-assistant:latest
-    template: lansible/home-assistant:${DRONE_TAG:-master}-ARCH
+    template: lansible/home-assistant:${DRONE_TAG:-dev}-ARCH
     platforms:
       - linux/amd64
       - linux/arm64
