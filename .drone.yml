@@ -20,6 +20,7 @@ steps:
       # First line is bare minimum
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
+                      |mobile_app\
                       |mqtt\
                       |buienradar\
                       |denonavr\
@@ -52,6 +53,7 @@ steps:
       # First line is bare minimum
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
+                      |mobile_app\
                       |mqtt\
                       |buienradar\
                       |denonavr\
