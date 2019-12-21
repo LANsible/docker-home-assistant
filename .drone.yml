@@ -21,6 +21,7 @@ steps:
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
                       |mobile_app\
+                      |cloud\
                       |mqtt\
                       |buienradar\
                       |denonavr\
@@ -54,6 +55,7 @@ steps:
       - "COMPONENTS=frontend|recorder|http\
                       |discovery\
                       |mobile_app\
+                      |cloud\
                       |mqtt\
                       |buienradar\
                       |denonavr\
