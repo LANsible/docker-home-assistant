@@ -1,19 +1,18 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.10 as builder
+ARG ARCHITECTURE
+FROM multiarch/alpine:${ARCHITECTURE}-v3.11 as builder
 
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG VERSION="dev"
 ARG COMPONENTS="frontend|recorder|http"
 ARG OTHER
 
+ENV VERSION="0.105.2"
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
 
-RUN addgroup -S -g 1000 hass 2>/dev/null && \
-    adduser -S -u 1000 -D -H -h /dev/shm -s /sbin/nologin -G hass -g hass hass 2>/dev/null && \
-    addgroup hass dialout
+RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
 RUN apk add --no-cache \
         git \
@@ -55,35 +54,31 @@ RUN pip3 install \
       --no-warn-script-location \
       -r /tmp/requirements.txt
 
-FROM alpine:3.10
+FROM multiarch/alpine:${ARCHITECTURE}-v3.11
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/dev/shm
 
 # Set PYTHONPATH where to modules will be copied to
-ENV PYTHONPATH=/opt/python3.7/site-packages
+ENV PYTHONPATH=/opt/python3.8/site-packages
 
-# Copy users from builder
-COPY --from=builder \
-    /etc/passwd \
-    /etc/group \
-    /etc/
+# Copy the unprivileged user
+COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python modules
-COPY --from=builder /root/.local/lib/python3.7/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.8/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
 COPY --from=builder /root/.local/bin /usr/local/bin
 
 # Copy needed libs from builder
+# libsas12 need both .so.3
 COPY --from=builder \
-    /usr/lib/libcrypto.so.43 \
     /usr/lib/liblber-2.4.so.2 \
     /usr/lib/libldap_r-2.4.so.2 \
     /usr/lib/libpq.so.5 \
-    /usr/lib/libsasl2.so.3 \
-    /usr/lib/libssl.so.45 \
-    /lib/
+    /usr/lib/libsasl2.so.* \
+    /usr/lib/
 
 # Add python3
 RUN apk add --no-cache \
