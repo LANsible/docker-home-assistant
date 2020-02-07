@@ -9,7 +9,7 @@ services:
       - hass-data:/data
 
   homeassistant:
-    image: hass
+    image: lansible/home-assistant:latest
     ports:
      - "8123:8123"
     depends_on:
