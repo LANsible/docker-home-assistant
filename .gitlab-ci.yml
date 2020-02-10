@@ -2,7 +2,7 @@
 variables:
   DOCKER_IMAGE_NAME: lansible/home-assistant
   BUILD_ARGS:
-    "COMPONENTS=frontend|recorder|http\
+    "--build-arg COMPONENTS=frontend|recorder|http\
       |discovery\
       |mobile_app\
       |cloud\
@@ -10,8 +10,8 @@ variables:
       |buienradar\
       |denonavr\
       |androidtv\
-      |opentherm_gw\
-    OTHER=auth.mfa_modules.totp"
+      |opentherm_gw \
+    --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
   - template: Container-Scanning.gitlab-ci.yml
