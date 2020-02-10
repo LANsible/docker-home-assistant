@@ -2,17 +2,15 @@
 variables:
   DOCKER_IMAGE_NAME: lansible/home-assistant
   BUILD_ARGS:
-    "COMPONENTS=frontend|recorder|http
-      |discovery
-      |mobile_app
-      |cloud
-      |mqtt
-      |buienradar
-      |denonavr
-      |androidtv
-      |opentherm_gw
-      |flux
-      |telegram_bot
+    "COMPONENTS=frontend|recorder|http\
+      |discovery\
+      |mobile_app\
+      |cloud\
+      |mqtt\
+      |buienradar\
+      |denonavr\
+      |androidtv\
+      |opentherm_gw\
     OTHER=auth.mfa_modules.totp"
 
 include:
