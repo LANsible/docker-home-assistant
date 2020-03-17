@@ -25,7 +25,7 @@ RUN apk add --no-cache \
         postgresql-dev
 
 # Setup requirements files
-ADD "https://raw.githubusercontent.com/home-assistant/home-assistant/${VERSION}/requirements_all.txt" /tmp
+ADD "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" /tmp
 
 # First filter core requirements from a file by selecting comment header until empty line
 # Prefix all components with component to avoid matching packages containing a component name (yi for example)
@@ -42,7 +42,7 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
       awk -v RS= '$0~ENVIRON["OTHER"]' /tmp/requirements_all.txt >> /tmp/requirements.txt; \
     fi; \
     if [ "${VERSION}" = "dev" ]; then \
-      echo -e "https://github.com/home-assistant/home-assistant/archive/dev.zip\npsycopg2" >> /tmp/requirements.txt; \
+      echo -e "https://github.com/home-assistant/core/archive/dev.zip\npsycopg2" >> /tmp/requirements.txt; \
     else \
       echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
     fi;
