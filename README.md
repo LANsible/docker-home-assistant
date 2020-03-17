@@ -1,6 +1,6 @@
 # Home Assistant / HASS in Docker!
 
-[![Build Status](https://cloud.drone.io/api/badges/LANsible/docker-home-assistant/status.svg)](https://cloud.drone.io/LANsible/docker-home-assistant)
+[![pipeline status](https://gitlab.com/lansible1/docker-home-assistant/badges/master/pipeline.svg)](https://gitlab.com/lansible1/docker-home-assistant/-/commits/master)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lansible/home-assistant.svg)](https://hub.docker.com/r/lansible/home-assistant)
 [![Docker Version](https://images.microbadger.com/badges/version/lansible/home-assistant:latest.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
 [![Docker Size/Layers](https://images.microbadger.com/badges/image/lansible/home-assistant:latest.svg)](https://microbadger.com/images/lansible/home-assistant:latest)
