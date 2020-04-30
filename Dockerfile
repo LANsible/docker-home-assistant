@@ -8,7 +8,7 @@ LABEL maintainer="Wilmar den Ouden" \
 ARG COMPONENTS="frontend|recorder|http"
 ARG OTHER
 
-ENV VERSION="0.109.0"
+ENV VERSION="0.109.1"
 # Run all make job simultaneously
 ENV MAKEFLAGS=-j
 
