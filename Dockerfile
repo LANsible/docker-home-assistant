@@ -17,6 +17,7 @@ RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 RUN apk add --no-cache \
         git \
         python3-dev \
+        py3-pip \
         libffi-dev \
         gcc \
         musl-dev \
