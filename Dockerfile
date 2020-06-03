@@ -1,6 +1,6 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
 ARG ARCHITECTURE
-FROM multiarch/alpine:${ARCHITECTURE}-v3.11 as builder
+FROM multiarch/alpine:${ARCHITECTURE}-v3.12 as builder
 
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
