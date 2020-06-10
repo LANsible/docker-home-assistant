@@ -9,8 +9,6 @@ ARG COMPONENTS="frontend|recorder|http"
 ARG OTHER
 
 ENV VERSION="0.111.0"
-# Run all make job simultaneously
-ENV MAKEFLAGS=-j
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -48,14 +46,18 @@ RUN awk -v RS= '/# Home Assistant core/' /tmp/requirements_all.txt > /tmp/requir
       echo -e "homeassistant==${VERSION}\npsycopg2" >> /tmp/requirements.txt; \
     fi;
 
+# Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
 # Install requirements and Home Assistant
-RUN pip3 install \
+RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
+    export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
+    pip3 install \
       --no-cache-dir \
       --user \
       --no-warn-script-location \
       -r /tmp/requirements.txt
 
-FROM multiarch/alpine:${ARCHITECTURE}-v3.11
+
+FROM multiarch/alpine:${ARCHITECTURE}-v3.12
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/dev/shm
@@ -66,7 +68,10 @@ ENV PYTHONPATH=/opt/python3.8/site-packages
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
-# Copy Python modules
+# Copy Python system modules
+COPY --from=builder /usr/lib/python3.8/site-packages/ /usr/lib/python3.8/site-packages/
+
+# Copy Python user modules
 COPY --from=builder /root/.local/lib/python3.8/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
