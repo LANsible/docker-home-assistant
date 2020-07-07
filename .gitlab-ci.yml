@@ -10,7 +10,8 @@ variables:
       |buienradar\
       |denonavr\
       |androidtv\
-      |opentherm_gw \
+      |opentherm_gw\
+      |ssdp \
     --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
