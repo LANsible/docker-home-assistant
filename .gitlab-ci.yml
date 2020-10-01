@@ -12,6 +12,7 @@ variables:
       |androidtv\
       |opentherm_gw\
       |ssdp \
+      |image \
     --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
