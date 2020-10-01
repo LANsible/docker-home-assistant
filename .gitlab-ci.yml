@@ -7,11 +7,12 @@ variables:
       |mobile_app\
       |cloud\
       |mqtt\
+      |ssdp\
+      |image\
       |buienradar\
       |denonavr\
       |androidtv\
-      |opentherm_gw\
-      |ssdp \
+      |opentherm_gw \
     --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
