@@ -14,6 +14,7 @@ RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
 # postgres-dev needed for npsycopg2
 # zlib-dev needed for Pillow (needed for image)
+# jpeg-dev needed for Pillow (needed for image)
 RUN apk add --no-cache \
         git \
         python3-dev \
@@ -24,7 +25,8 @@ RUN apk add --no-cache \
         libressl-dev \
         make \
         postgresql-dev \
-        zlib-dev
+        zlib-dev \
+        jpeg-dev
 
 RUN mkdir -p /tmp/homeassistant
 
