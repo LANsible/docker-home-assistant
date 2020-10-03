@@ -5,7 +5,7 @@ FROM multiarch/alpine:${ARCHITECTURE}-v3.12 as builder
 LABEL maintainer="Wilmar den Ouden" \
     description="Homeassistant alpine!"
 
-ARG COMPONENTS="frontend|recorder|http"
+ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 ENV VERSION="0.115.6"
@@ -25,8 +25,8 @@ RUN apk add --no-cache \
         libressl-dev \
         make \
         postgresql-dev \
-        zlib-dev \
-        jpeg-dev
+        jpeg-dev \
+        zlib-dev
 
 RUN mkdir -p /tmp/homeassistant
 
@@ -90,12 +90,18 @@ COPY --from=builder /root/.local/lib/python3.8/site-packages/ ${PYTHONPATH}
 COPY --from=builder /root/.local/bin /usr/local/bin
 
 # Copy needed libs from builder
+# libz for image component
+COPY --from=builder \
+    /lib/libz.so \
+    /lib/
 # libsas12 need both .so.3
+# libjpeg for image component
 COPY --from=builder \
     /usr/lib/liblber-2.4.so.2 \
     /usr/lib/libldap_r-2.4.so.2 \
     /usr/lib/libpq.so.5 \
     /usr/lib/libsasl2.so.* \
+    /usr/lib/libjpeg.so.8 \
     /usr/lib/
 
 # Add python3

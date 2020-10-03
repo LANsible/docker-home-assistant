@@ -2,13 +2,8 @@
 variables:
   DOCKER_IMAGE_NAME: lansible/home-assistant
   BUILD_ARGS:
-    "--build-arg COMPONENTS=frontend|recorder|http\
-      |discovery\
-      |mobile_app\
-      |cloud\
+    "--build-arg COMPONENTS=frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud\
       |mqtt\
-      |ssdp\
-      |image\
       |buienradar\
       |denonavr\
       |androidtv\
