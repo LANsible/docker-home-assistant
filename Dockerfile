@@ -8,7 +8,7 @@ LABEL maintainer="Wilmar den Ouden" \
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
-ENV VERSION="0.117.4"
+ENV VERSION="0.117.6"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
