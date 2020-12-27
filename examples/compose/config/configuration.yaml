@@ -16,3 +16,26 @@ frontend:
 # Set database path
 recorder:
   db_url: postgresql://hass:password@postgres/home_assistant_db
+
+# Discover some devices automatically
+discovery:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+# Need to get past onboarding
+config:
+
+# Needed for discovery
+ssdp:
+
+# Android app integration
+mobile_app:
+# Needed otherwise the app registration errors
+cloud:

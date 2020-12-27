@@ -1,5 +1,5 @@
 ---
-version: "3.7"
+version: "3.8"
 services:
   volumes-provisioner:
     image: hasnat/volumes-provisioner
@@ -10,6 +10,7 @@ services:
 
   homeassistant:
     image: lansible/home-assistant:latest
+    restart: unless-stopped  # makes it possible to restart from within hass
     ports:
      - "8123:8123"
     depends_on:
