@@ -65,6 +65,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
       --no-cache-dir \
       --user \
       --no-warn-script-location \
+      --compile \
       -r requirements.txt \
       -r requirements_strip.txt
 
