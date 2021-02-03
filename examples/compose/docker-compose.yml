@@ -18,9 +18,11 @@ services:
     volumes:
      - ./config:/config
      - hass-data:/data
+    depends_on:
+      - postgres
 
   postgres:
-    image: postgres:11.4-alpine
+    image: postgres:13.1-alpine
     environment:
       - POSTGRES_USER=hass
       - POSTGRES_PASSWORD=password
