@@ -8,7 +8,7 @@ LABEL maintainer="Wilmar den Ouden" \
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
-ENV VERSION="2021.5.4"
+ENV VERSION="2021.6.3"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -21,6 +21,7 @@ RUN apk add --no-cache \
         py3-pip \
         libffi-dev \
         gcc \
+        g++ \
         musl-dev \
         libressl-dev \
         make \
@@ -70,7 +71,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
       -r requirements_strip.txt
 
 
-FROM multiarch/alpine:${ARCHITECTURE}-v3.12
+FROM multiarch/alpine:${ARCHITECTURE}-v3.13
 
 # Needs seperate otherwise not expanded in next ENV
 ENV HOME=/dev/shm
