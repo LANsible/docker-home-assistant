@@ -108,7 +108,8 @@ COPY --from=builder \
 
 # Add python3
 RUN apk add --no-cache \
-    python3
+    python3 \
+    tzdata
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
