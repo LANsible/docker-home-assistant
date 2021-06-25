@@ -29,7 +29,7 @@ if [ -d "/config" ]; then
       ln -sf "/config/$filename" "/data/$filename"
     fi
   done
-else 
+else
   # Print warning when no config was found, could be intentional
   echo "No /config found, no symlink will be created"
 fi
