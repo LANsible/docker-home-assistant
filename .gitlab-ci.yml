@@ -12,13 +12,6 @@ variables:
 
 include:
   - template: Container-Scanning.gitlab-ci.yml
-  - remote: https://raw.githubusercontent.com/LANsible/gitlab-includes/master/docker-login.yml
+  - remote: https://raw.githubusercontent.com/LANsible/gitlab-includes/master/default.yml
   - remote: https://raw.githubusercontent.com/LANsible/gitlab-includes/master/docker-build.yml
   - remote: https://raw.githubusercontent.com/LANsible/gitlab-includes/master/sast-cis-benchmark.yml
-
-stages:
-  - lint
-  - build
-  - test
-  - push
-  - manifest
