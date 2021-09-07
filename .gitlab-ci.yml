@@ -7,7 +7,7 @@ variables:
       |buienradar\
       |denonavr\
       |androidtv\
-      |opentherm_gw
+      |opentherm_gw\
       |utility_meter \
     --build-arg OTHER=auth.mfa_modules.totp"
 
