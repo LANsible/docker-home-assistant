@@ -58,6 +58,7 @@ RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|c
 # Install requirements and Home Assistant
 RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
     export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
+    pip3 install --upgrade --no-cache-dir pip && \
     pip3 install \
       --no-cache-dir \
       --user \
