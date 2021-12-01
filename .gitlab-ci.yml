@@ -8,7 +8,8 @@ variables:
       |denonavr\
       |androidtv\
       |opentherm_gw\
-      |utility_meter \
+      |utility_meter\
+      |octoprint \
     --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
