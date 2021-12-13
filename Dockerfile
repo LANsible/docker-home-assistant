@@ -1,11 +1,11 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.14 as builder
+FROM alpine:3.15 as builder
 
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2021.12.0"
+ENV VERSION="2021.12.1"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
