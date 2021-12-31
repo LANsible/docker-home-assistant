@@ -5,7 +5,7 @@ ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2021.12.1"
+ENV VERSION="2021.11.5"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -70,7 +70,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.14
+FROM alpine:3.15
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
@@ -97,14 +97,12 @@ COPY --from=builder /root/.local/bin /usr/local/bin
 COPY --from=builder \
     /lib/libz.so \
     /lib/
-# libsas12 need both .so.3
 # libjpeg for image component
 COPY --from=builder \
-    /usr/lib/liblber-2.4.so.2 \
-    /usr/lib/libldap_r-2.4.so.2 \
     /usr/lib/libpq.so.5 \
-    /usr/lib/libsasl2.so.* \
+    /usr/lib/libpq.so.5 \
     /usr/lib/libjpeg.so.8 \
+    /usr/lib/libffi.so.8 \
     /usr/lib/
 
 # Add python3
