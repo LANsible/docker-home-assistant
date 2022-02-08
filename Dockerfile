@@ -115,5 +115,5 @@ COPY ./entrypoint.sh /entrypoint.sh
 
 USER hass
 ENTRYPOINT ["/bin/busybox", "ash", "/entrypoint.sh" ]
-CMD ["hass", "--config=/data", "--log-file=/proc/self/fd/1", "--skip-pip", "--runner"]
+CMD ["hass", "--config=/data", "--log-file=/proc/self/fd/1", "--skip-pip"]
 EXPOSE 8123
