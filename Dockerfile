@@ -5,7 +5,7 @@ ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2022.4.6"
+ENV VERSION="2022.5.0"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
