@@ -1,11 +1,11 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.15 as builder
+FROM alpine:3.16 as builder
 
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2022.6.7"
+ENV VERSION="2022.9.5"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -70,7 +70,7 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.15
+FROM alpine:3.16
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
@@ -78,16 +78,16 @@ LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 ENV HOME=/dev/shm
 
 # Set PYTHONPATH where to modules will be copied to
-ENV PYTHONPATH=/opt/python3.9/site-packages
+ENV PYTHONPATH=/opt/python3.10/site-packages
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python system modules
-COPY --from=builder /usr/lib/python3.9/site-packages/ /usr/lib/python3.9/site-packages/
+COPY --from=builder /usr/lib/python3.10/site-packages/ /usr/lib/python3.10/site-packages/
 
 # Copy Python user modules
-COPY --from=builder /root/.local/lib/python3.9/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.10/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
 COPY --from=builder /root/.local/bin /usr/local/bin
