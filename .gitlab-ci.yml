@@ -9,7 +9,8 @@ variables:
       |androidtv\
       |opentherm_gw\
       |utility_meter\
-      |octoprint \
+      |octoprint\
+      |season \
     --build-arg OTHER=auth.mfa_modules.totp"
 
 include:
