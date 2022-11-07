@@ -1,9 +1,9 @@
 # Home Assistant / HASS in Docker!
 
-[![Build Status](https://gitlab.com/lansible1/docker-home-assistant/badges/master/pipeline.svg)](https://gitlab.com/lansible1/docker-home-assistant/pipelines)
+[![Build Status](https://github.com/LANsible/docker-home-assistant/actions/workflows/docker.yml/badge.svg)](https://github.com/LANsible/docker-home-assistant/actions/workflows/docker.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lansible/home-assistant.svg)](https://hub.docker.com/r/lansible/home-assistant)
-[![Docker Version](https://img.shields.io/docker/v/lansible/home-assistant?sort=date)](https://hub.docker.com/r/lansible/home-assistant)
-[![Docker Image Size](https://img.shields.io/docker/image-size/lansible/home-assistant?sort=date)](https://hub.docker.com/r/lansible/home-assistant)
+[![Docker Version](https://img.shields.io/docker/v/lansible/home-assistant.svg?sort=semver)](https://hub.docker.com/r/lansible/home-assistant)
+[![Docker Size/Layers](https://img.shields.io/docker/image-size/lansible/home-assistant.svg?sort=semver)](https://hub.docker.com/r/lansible/home-assistant)
 
 ## Why not use the official container?
 
