@@ -25,15 +25,13 @@ RUN apk add --no-cache \
         jpeg-dev \
         zlib-dev
 
-RUN mkdir -p /tmp/homeassistant
-
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
-ADD "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" /tmp
-ADD "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements.txt" /tmp
-ADD "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt" /tmp/homeassistant
-
 WORKDIR /tmp
+RUN mkdir -p /tmp/homeassistant && \
+    wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" && \
+    wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements.txt" && \
+    wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt"
 
 # Strip requirements_all.txt to just what I need for my components
 # Prefix all components with component to avoid matching packages containing a component name (yi for example)
