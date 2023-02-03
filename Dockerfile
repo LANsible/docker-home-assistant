@@ -1,11 +1,11 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.16 as builder
+FROM alpine:3.17 as builder
 
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2022.11.1"
+ENV VERSION="2023.2.1"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -68,15 +68,13 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.16
+FROM alpine:3.17
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
-# Needs seperate otherwise not expanded in next ENV
-ENV HOME=/dev/shm
-
 # Set PYTHONPATH where to modules will be copied to
-ENV PYTHONPATH=/opt/python3.10/site-packages
+ENV HOME=/dev/shm \
+  PYTHONPATH=/opt/python3.10/site-packages
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
