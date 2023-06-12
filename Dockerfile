@@ -1,7 +1,7 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
 FROM alpine:3.18 as builder
 
-ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
+ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
@@ -34,7 +34,7 @@ RUN mkdir -p /tmp/homeassistant && \
     wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt"
 
 # Strip requirements_all.txt to just what I need for my components
-# Prefix all components with component to avoid matching packages containing a component name (yi for example)
+# Prefix all components with components. to avoid matching packages containing a component name (yi for example)
 # https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
 # Match the components in the comment string and select until the newline
 # https://stackoverflow.com/a/39729735 && https://stackoverflow.com/a/39384347
