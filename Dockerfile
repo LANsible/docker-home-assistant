@@ -1,7 +1,8 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
 FROM alpine:3.18 as builder
 
-ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload"
+# compensation is questionable but it isn't enabled but it still starting and requiring numpy
+ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload|compensation"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
