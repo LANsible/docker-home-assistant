@@ -9,6 +9,6 @@ jobs:
     with:
       image_name: lansible/home-assistant
       build_args: |
-        COMPONENTS=frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|mqtt|buienradar|denonavr|androidtv|opentherm_gw|utility_meter|octoprint|season
+        COMPONENTS=frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|mqtt|buienradar|denonavr|androidtv|opentherm_gw|utility_meter|octoprint|season|opnsense
         OTHER=auth.mfa_modules.totp
     secrets: inherit
