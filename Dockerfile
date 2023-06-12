@@ -1,11 +1,11 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.17 as builder
+FROM alpine:3.18 as builder
 
 ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2023.2.1"
+ENV VERSION="2023.6.1"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -68,22 +68,22 @@ RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.17
+FROM alpine:3.18
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
 # Set PYTHONPATH where to modules will be copied to
 ENV HOME=/dev/shm \
-  PYTHONPATH=/opt/python3.10/site-packages
+  PYTHONPATH=/opt/python3.11/site-packages
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python system modules
-COPY --from=builder /usr/lib/python3.10/site-packages/ /usr/lib/python3.10/site-packages/
+COPY --from=builder /usr/lib/python3.11/site-packages/ /usr/lib/python3.11/site-packages/
 
 # Copy Python user modules
-COPY --from=builder /root/.local/lib/python3.10/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.11/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
 COPY --from=builder /root/.local/bin /usr/local/bin
