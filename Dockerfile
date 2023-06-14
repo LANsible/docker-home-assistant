@@ -56,11 +56,11 @@ RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|c
 
 # Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
 # Install requirements and Home Assistant
-RUN CORES=$(grep -c '^processor' /proc/cpuinfo); \
+RUN --mount=type=cache,target=/root/.cache \
+    CORES=$(grep -c '^processor' /proc/cpuinfo); \
     export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
-    pip3 install --upgrade --no-cache-dir pip && \
+    pip3 install --upgrade pip && \
     pip3 install \
-      --no-cache-dir \
       --user \
       --no-warn-script-location \
       --compile \
