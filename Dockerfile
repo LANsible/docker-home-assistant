@@ -75,7 +75,8 @@ LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
 # Set PYTHONPATH where to modules will be copied to
 ENV HOME=/dev/shm \
-  PYTHONPATH=/opt/python3.11/site-packages
+  PYTHONPATH=/opt/python3.11/site-packages \
+  TMPDIR=/dev/shm
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
