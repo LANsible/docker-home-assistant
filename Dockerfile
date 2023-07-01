@@ -2,8 +2,8 @@
 FROM alpine:3.18 as builder
 
 # compensation is questionable but it isn't enabled but it still starting and requiring numpy
-# conversation is needed for cloud
-ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload|compensation|conversation"
+# conversation/tts is needed for cloud
+ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload|compensation|conversation|tts"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
