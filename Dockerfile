@@ -14,6 +14,7 @@ RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 # postgres-dev needed for npsycopg2
 # zlib-dev needed for Pillow (needed for image)
 # jpeg-dev needed for Pillow (needed for image)
+# openblas-dev requirement for numpy https://github.com/numpy/numpy/issues/24703
 RUN apk add --no-cache \
         git \
         python3-dev \
@@ -25,7 +26,8 @@ RUN apk add --no-cache \
         make \
         postgresql-dev \
         jpeg-dev \
-        zlib-dev
+        zlib-dev \
+        openblas-dev
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
