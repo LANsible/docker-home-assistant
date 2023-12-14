@@ -99,13 +99,14 @@ COPY --from=builder \
     /lib/libz.so \
     /lib/
 # libjpeg for image component
-# openblas requirement for numpy https://github.com/numpy/numpy/issues/24703
+# openblas/libgfortran requirement for numpy https://github.com/numpy/numpy/issues/24703
 COPY --from=builder \
     /usr/lib/libpq.so.5 \
     /usr/lib/libpq.so.5 \
     /usr/lib/libjpeg.so.8 \
     /usr/lib/libffi.so.8 \
     /usr/lib/libopenblas.so.3 \
+    /usr/lib/libgfortran.so.5 \
     /usr/lib/
 
 # Add python3
