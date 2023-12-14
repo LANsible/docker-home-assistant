@@ -1,5 +1,5 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.18 as builder
+FROM alpine:3.19 as builder
 
 # compensation is questionable but it isn't enabled but it still starting and requiring numpy
 # conversation/tts/assist_pipeline is needed for cloud
@@ -61,9 +61,9 @@ RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|c
 RUN --mount=type=cache,target=/root/.cache \
     CORES=$(grep -c '^processor' /proc/cpuinfo); \
     export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
-    pip3 install --upgrade pip && \
     pip3 install \
       --user \
+      --break-system-packages \
       --no-warn-script-location \
       --compile \
       -r requirements.txt \
