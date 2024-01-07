@@ -7,7 +7,7 @@ ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|fil
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2023.12.2"
+ENV VERSION="2024.1.2"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -57,6 +57,7 @@ RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|c
     fi;
 
 # Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
+# https://github.com/rhasspy/webrtc-noise-gain/issues/9
 # Install requirements and Home Assistant
 RUN --mount=type=cache,target=/root/.cache \
     CORES=$(grep -c '^processor' /proc/cpuinfo); \
@@ -67,12 +68,15 @@ RUN --mount=type=cache,target=/root/.cache \
       --no-warn-script-location \
       --compile \
       -r requirements.txt \
-      -r requirements_strip.txt
+      -r requirements_strip.txt \
+      git+https://github.com/rhasspy/webrtc-noise-gain
+
+
 
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.18
+FROM alpine:3.19
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
