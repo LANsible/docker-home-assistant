@@ -1,5 +1,5 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.19 as builder
+FROM python:3.12-alpine3.19 as builder
 
 # compensation is questionable but it isn't enabled but it still starting and requiring numpy
 # conversation/tts/assist_pipeline is needed for cloud
@@ -7,7 +7,7 @@ ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|fil
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2024.1.2"
+ENV VERSION="2024.4.3"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -16,17 +16,12 @@ RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 # jpeg-dev needed for Pillow (needed for image)
 # openblas-dev requirement for numpy https://github.com/numpy/numpy/issues/24703
 RUN apk add --no-cache \
-        git \
-        python3-dev \
-        py3-pip \
         libffi-dev \
         gcc \
         g++ \
-        musl-dev \
-        make \
         postgresql-dev \
-        jpeg-dev \
-        zlib-dev \
+        jpeg \
+        zlib \
         openblas-dev
 
 # Setup requirements files
@@ -68,9 +63,7 @@ RUN --mount=type=cache,target=/root/.cache \
       --no-warn-script-location \
       --compile \
       -r requirements.txt \
-      -r requirements_strip.txt \
-      git+https://github.com/rhasspy/webrtc-noise-gain
-
+      -r requirements_strip.txt
 
 
 #######################################################################################################################
@@ -82,17 +75,17 @@ LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
 # Set PYTHONPATH where to modules will be copied to
 ENV HOME=/dev/shm \
-  PYTHONPATH=/opt/python3.11/site-packages \
+  PYTHONPATH=/opt/python3.12/site-packages \
   TMPDIR=/dev/shm
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python system modules
-COPY --from=builder /usr/lib/python3.11/site-packages/ /usr/lib/python3.11/site-packages/
+COPY --from=builder /usr/lib/python3.12/site-packages/ /usr/lib/python3.12/site-packages/
 
 # Copy Python user modules
-COPY --from=builder /root/.local/lib/python3.11/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.12/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
 COPY --from=builder /root/.local/bin /usr/local/bin
