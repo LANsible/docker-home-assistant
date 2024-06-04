@@ -17,9 +17,6 @@ frontend:
 recorder:
   db_url: postgresql://hass:password@postgres/home_assistant_db
 
-# Discover some devices automatically
-discovery:
-
 # Enables support for tracking state changes over time
 history:
 
