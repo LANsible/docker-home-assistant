@@ -1,13 +1,13 @@
 # Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.19 as builder
+FROM alpine:3.20 as builder
 
 # compensation is questionable but it isn't enabled but it still starting and requiring numpy
-# conversation/tts/assist_pipeline is needed for cloud
-ARG COMPONENTS="frontend|recorder|http|image|discovery|ssdp|mobile_app|cloud|file_upload|compensation|conversation|tts|assist_pipeline"
+# conversation/tts/assist_pipeline/ffmpeg is needed for cloud
+ARG COMPONENTS="frontend|recorder|http|image|ssdp|backup|mobile_app|cloudfile_upload|compensation|conversation|tts|assist_pipeline|ffmpeg"
 ARG OTHER
 
 # https://github.com/home-assistant/core/releases
-ENV VERSION="2024.1.2"
+ENV VERSION="2024.5.5"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
@@ -15,6 +15,7 @@ RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 # zlib-dev needed for Pillow (needed for image)
 # jpeg-dev needed for Pillow (needed for image)
 # openblas-dev requirement for numpy https://github.com/numpy/numpy/issues/24703
+# ffmpef needed for ffmpeg
 RUN apk add --no-cache \
         git \
         python3-dev \
@@ -27,15 +28,18 @@ RUN apk add --no-cache \
         postgresql-dev \
         jpeg-dev \
         zlib-dev \
-        openblas-dev
+        openblas-dev \
+        ffmpeg
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
+# NOTE: setup the pip.conf from the hass base image so musl compiled wheels are available
 WORKDIR /tmp
 RUN mkdir -p /tmp/homeassistant && \
     wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" && \
     wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements.txt" && \
-    wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt"
+    wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt" && \
+    wget -qP / "https://raw.githubusercontent.com/home-assistant/docker-base/master/alpine/rootfs/etc/pip.conf"
 
 # Strip requirements_all.txt to just what I need for my components
 # Prefix all components with components. to avoid matching packages containing a component name (yi for example)
@@ -76,26 +80,29 @@ RUN --mount=type=cache,target=/root/.cache \
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.19
+FROM alpine:3.20
 
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
 
 # Set PYTHONPATH where to modules will be copied to
 ENV HOME=/dev/shm \
-  PYTHONPATH=/opt/python3.11/site-packages \
+  PYTHONPATH=/opt/python3.12/site-packages \
   TMPDIR=/dev/shm
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python system modules
-COPY --from=builder /usr/lib/python3.11/site-packages/ /usr/lib/python3.11/site-packages/
+COPY --from=builder /usr/lib/python3.12/site-packages/ /usr/lib/python3.12/site-packages/
 
 # Copy Python user modules
-COPY --from=builder /root/.local/lib/python3.11/site-packages/ ${PYTHONPATH}
+COPY --from=builder /root/.local/lib/python3.12/site-packages/ ${PYTHONPATH}
 
 # Copy pip installed binaries
 COPY --from=builder /root/.local/bin /usr/local/bin
+
+# Add ffmpeg
+COPY --from=builder /usr/bin/ffmpeg /usr/bin/ffmpeg
 
 # Copy needed libs from builder
 # libz for image component
