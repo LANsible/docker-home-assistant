@@ -8,11 +8,6 @@
 
 # Also hass makes /deps dir, HA_VERSION file and onboarding file
 
-# Create aliases to busybox
-alias basename="/bin/busybox basename"
-alias ln="/bin/busybox ln"
-alias mkdir="/bin/busybox mkdir"
-
 # Create symlinks when config mounted, else exit
 if [ ! -d "/data" ]; then
   echo "No /data found, please data volume to container"

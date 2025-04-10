@@ -11,28 +11,28 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: Europe/Amsterdam
 
-frontend:
-
 # Set database path
 recorder:
   db_url: postgresql://hass:password@postgres/home_assistant_db
 
-# Enables support for tracking state changes over time
-history:
-
-# View all events in a logbook
-logbook:
-
-# Track the sun
-sun:
-
-# Need to get past onboarding
+frontend:
+assist_pipeline:
+backup:
 config:
-
-# Needed for discovery
-ssdp:
-
-# Android app integration
-mobile_app:
-# Needed otherwise the app registration errors
+conversation:
+energy:
+go2rtc:
+history:
+homeassistant_alerts:
 cloud:
+image_upload:
+logbook:
+media_source:
+mobile_app:
+my:
+ssdp:
+stream:
+sun:
+usb:
+webhook:
+isal:

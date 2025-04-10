@@ -23,7 +23,7 @@ You could build the container locally to add plugins. It works like this:
 
 ```bash
 docker build . \
-      --build-arg COMPONENTS="frontend|mqtt"
+      --build-arg COMPONENTS="mqtt"
       --build-arg OTHER="auth.mfa_modules.totp"
       --tag lansible/home-assistant:0.90.2
 ```
@@ -31,8 +31,7 @@ The arguments are:
 
 | Build argument | Description                                    | Example                   |
 |----------------|------------------------------------------------|---------------------------|
-| `COMPONENTS`   | List of components to install plugins for      | `"frontend|mqtt"`         |
-| `OTHER`        | List of other (not component) parts to install | `"auth.mfa_modules.totp"` |
+| `COMPONENTS`   | List of extra components to install plugins for      | `"mqtt"`         |
 
 ## Credits
 

@@ -1,35 +1,40 @@
-# Inspired from https://github.com/seblucas/alpine-homeassistant
-FROM alpine:3.20 as builder
+ARG IMAGE=python:3.13-alpine3.21
 
-# compensation is questionable but it isn't enabled but it still starting and requiring numpy
-# conversation/tts/assist_pipeline/ffmpeg is needed for cloud
-ARG COMPONENTS="frontend|recorder|http|image|ssdp|backup|mobile_app|cloudfile_upload|compensation|conversation|tts|assist_pipeline|ffmpeg"
+FROM $IMAGE AS builder
+SHELL ["/bin/ash", "-o", "pipefail", "-c"]
+
+ARG COMPONENTS
 ARG OTHER
 
-# https://github.com/home-assistant/core/releases
-ENV VERSION="2024.9.1"
+ENV \
+  # https://www.home-assistant.io/integrations/default_config/
+  # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
+  MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp" \
+  # https://github.com/home-assistant/core/releases
+  VERSION="2025.4.1" \
+  UV_EXTRA_INDEX_URL="https://wheels.home-assistant.io/musllinux-index/"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
 
 # postgres-dev needed for npsycopg2
-# zlib-dev needed for Pillow (needed for image)
-# jpeg-dev needed for Pillow (needed for image)
+# zlib-dev needed for Pillow (generic)
+# jpeg-dev needed for Pillow (generic)
+# ffmpeg4 required for av (generic)
 # openblas-dev requirement for numpy https://github.com/numpy/numpy/issues/24703
-# ffmpef needed for ffmpeg
-RUN apk add --no-cache \
-        git \
-        python3-dev \
-        py3-pip \
-        libffi-dev \
-        gcc \
-        g++ \
-        musl-dev \
-        make \
-        postgresql-dev \
-        jpeg-dev \
-        zlib-dev \
-        openblas-dev \
-        ffmpeg
+# libjpeg-turbo is required for stream
+RUN --mount=type=cache,target=/etc/apk/cache \
+  apk add \
+    g++ \
+    autoconf \
+    make \
+    libffi-dev \
+    postgresql-dev \
+    jpeg-dev \
+    libturbojpeg \
+    zlib-dev \
+    openblas-dev \
+    ffmpeg-dev \
+    libjpeg-turbo
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
@@ -39,7 +44,7 @@ RUN mkdir -p /tmp/homeassistant && \
     wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" && \
     wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements.txt" && \
     wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt" && \
-    wget -qP / "https://raw.githubusercontent.com/home-assistant/docker-base/master/alpine/rootfs/etc/pip.conf"
+    wget -qP /etc/ "https://raw.githubusercontent.com/home-assistant/docker-base/master/alpine/rootfs/etc/pip.conf"
 
 # Strip requirements_all.txt to just what I need for my components
 # Prefix all components with components. to avoid matching packages containing a component name (yi for example)
@@ -49,10 +54,11 @@ RUN mkdir -p /tmp/homeassistant && \
 # When OTHER is specified grep those and add to requirements
 # Finally add home-assistant and postgreslibs to requirements.
 # Needed in file since pip install -r requirements.txt home-assistant simply ignores the -r option
-RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
-    awk -v RS= '$0~ENVIRON["COMPONENTS"]' requirements_all.txt >> requirements_strip.txt && \
-    if [ -n "${OTHER}" ]; then \
-      awk -v RS= '$0~ENVIRON["OTHER"]' requirements_all.txt >> requirements_strip.txt; \
+RUN export MINIMAL_COMPONENTS=$(echo components.${MINIMAL_COMPONENTS} | sed --expression='s/|/|components./g') && \
+    awk -v RS= '$0~ENVIRON["MINIMAL_COMPONENTS"]' requirements_all.txt >> requirements_strip.txt && \
+    if [ -n "${COMPONENTS}" ]; then \
+      export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
+      awk -v RS= '$0~ENVIRON["COMPONENTS"]' requirements_all.txt >> requirements_strip.txt; \
     fi; \
     if [ "${VERSION}" = "dev" ]; then \
       echo -e "https://github.com/home-assistant/core/archive/dev.zip\npsycopg2" >> requirements_strip.txt; \
@@ -66,69 +72,60 @@ RUN export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|c
 RUN --mount=type=cache,target=/root/.cache \
     CORES=$(grep -c '^processor' /proc/cpuinfo); \
     export MAKEFLAGS="-j$((CORES+1)) -l${CORES}"; \
-    pip3 install \
-      --user \
-      --break-system-packages \
-      --no-warn-script-location \
-      --compile \
+    pip3 install --root-user-action=ignore uv && \
+    uv venv && \
+    # link mode is needed since cache is on tmpdir
+    uv pip install \
+      --link-mode=copy \
       -r requirements.txt \
-      -r requirements_strip.txt \
-      git+https://github.com/rhasspy/webrtc-noise-gain
-
-
+      -r requirements_strip.txt && \
+    # update shebang to global python
+    sed -i '1 s|^.*$|#!/usr/local/bin/python3|' /tmp/.venv/bin/hass
 
 #######################################################################################################################
 # Final image
 #######################################################################################################################
-FROM alpine:3.20
-
+FROM $IMAGE
 LABEL org.label-schema.description="Minimal Home Assistant on Alpine"
+SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
 # Set PYTHONPATH where to modules will be copied to
 ENV HOME=/dev/shm \
-  PYTHONPATH=/opt/python3.12/site-packages \
   TMPDIR=/dev/shm
 
 # Copy the unprivileged user
 COPY --from=builder /etc_passwd /etc/passwd
 
-# Copy Python system modules
-COPY --from=builder /usr/lib/python3.12/site-packages/ /usr/lib/python3.12/site-packages/
-
 # Copy Python user modules
-COPY --from=builder /root/.local/lib/python3.12/site-packages/ ${PYTHONPATH}
+COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
 
-# Copy pip installed binaries
-COPY --from=builder /root/.local/bin /usr/local/bin
+# Add home-assistant binary
+COPY --link --from=builder /tmp/.venv/bin/hass /usr/local/bin/hass
 
-# Add ffmpeg
-COPY --from=builder /usr/bin/ffmpeg /usr/bin/ffmpeg
+RUN --mount=type=cache,target=/etc/apk/cache \
+  apk add \
+    libffi \
+    # postgres
+    libpq \
+    # openblas/libgfortran requirement for numpy https://github.com/numpy/numpy/issues/24703
+    openblas-dev \
+    libgfortran \
+    # stream components
+    ffmpeg \
+    libjpeg-turbo-dev \
+    libgcc \
+    libstdc++ \
+    alsa-lib \
+    sdl2
 
-# Copy needed libs from builder
-# libz for image component
-COPY --from=builder \
-    /lib/libz.so \
-    /lib/
-# libjpeg for image component
-# openblas/libgfortran requirement for numpy https://github.com/numpy/numpy/issues/24703
-COPY --from=builder \
-    /usr/lib/libpq.so.5 \
-    /usr/lib/libpq.so.5 \
-    /usr/lib/libjpeg.so.8 \
-    /usr/lib/libffi.so.8 \
-    /usr/lib/libopenblas.so.3 \
-    /usr/lib/libgfortran.so.5 \
-    /usr/lib/
-
-# Add python3
-RUN apk add --no-cache \
-    python3 \
-    tzdata
+# go2rtc binary check below for version:
+# https://github.com/home-assistant/core/blob/dev/Dockerfile#L28C69-L28C74
+COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.9 /usr/local/bin/go2rtc /usr/local/bin/go2rtc
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
 
 USER hass
 ENTRYPOINT ["/bin/busybox", "ash", "/entrypoint.sh" ]
-CMD ["hass", "--config=/data", "--log-file=/proc/self/fd/1", "--skip-pip"]
+CMD ["hass", "--config=/data", "--log-file=/proc/self/fd/1", "--log-no-color", "--skip-pip"]
 EXPOSE 8123
