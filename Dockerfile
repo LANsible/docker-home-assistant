@@ -47,14 +47,13 @@ RUN mkdir -p /tmp/homeassistant && \
     wget -qP /etc/ "https://raw.githubusercontent.com/home-assistant/docker-base/master/alpine/rootfs/etc/pip.conf"
 
 # Strip requirements_all.txt to just what I need for my components
-# Prefix all components with components. to avoid matching packages containing a component name (yi for example)
-# https://stackoverflow.com/a/6744040 < parameter expension does not work, not POSIX
+# Prefix all components with components. and match till newline to avoid matching packages containing a component name (yi for example)
+# and matching components starting with the same stream vs. streamlabs for example (match till newline): https://unix.stackexchange.com/a/484307
 # Match the components in the comment string and select until the newline
 # https://stackoverflow.com/a/39729735 && https://stackoverflow.com/a/39384347
-# When OTHER is specified grep those and add to requirements
 # Finally add home-assistant and postgreslibs to requirements.
 # Needed in file since pip install -r requirements.txt home-assistant simply ignores the -r option
-RUN export MINIMAL_COMPONENTS=$(echo components.${MINIMAL_COMPONENTS} | sed --expression='s/|/|components./g') && \
+RUN export MINIMAL_COMPONENTS=$(echo ${MINIMAL_COMPONENTS} | awk -F '|' -v OFS='|' -vpre="components." -vsuf='\\n' '{ for (i=1;i<=NF;++i) $i = pre $i suf; print }') && \
     awk -v RS= '$0~ENVIRON["MINIMAL_COMPONENTS"]' requirements_all.txt >> requirements_strip.txt && \
     if [ -n "${COMPONENTS}" ]; then \
       export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
