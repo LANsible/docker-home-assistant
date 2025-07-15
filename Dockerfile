@@ -8,7 +8,7 @@ ARG OTHER
 
 ENV \
   # https://github.com/home-assistant/core/releases
-  VERSION="2025.6.1" \
+  VERSION="2025.7.2" \
   # https://www.home-assistant.io/integrations/default_config/
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
   MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp" \
