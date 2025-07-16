@@ -11,7 +11,8 @@ ENV \
   VERSION="2025.7.2" \
   # https://www.home-assistant.io/integrations/default_config/
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
-  MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp" \
+  # ADDED: tts
+  MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp|tts" \
   UV_EXTRA_INDEX_URL="https://wheels.home-assistant.io/musllinux-index/"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
