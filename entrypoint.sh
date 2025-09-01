@@ -14,6 +14,11 @@ if [ ! -d "/data" ]; then
   exit 1
 fi
 
+if [ ! -L "/data/custom_components" ]; then
+  echo "Creating symlink from /custom_components/ to /data/custom_components"
+  ln -sf "/custom_components/" "/data/custom_components"
+fi
+
 if [ -d "/config" ]; then
   # For each config file create a symlink
   for file in /config/*; do

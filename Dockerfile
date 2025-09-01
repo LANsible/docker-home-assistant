@@ -35,7 +35,17 @@ RUN --mount=type=cache,target=/etc/apk/cache \
     zlib-dev \
     openblas-dev \
     ffmpeg-dev \
-    libjpeg-turbo
+    libjpeg-turbo \
+    # to parse the manifest.json files of custom_components
+    jq
+
+# TODO: make this an ENV var
+# Grep some custom modules
+# https://github.com/golles/ha-knmi/releases/
+# https://github.com/danielrivard/homeassistant-innova/releases
+RUN mkdir /custom_components && \
+  wget -qO- https://github.com/golles/ha-knmi/releases/download/v3.0.2/knmi.zip | unzip -jd /custom_components/knmi - && \
+  wget -qO- https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.zip | unzip -jd /custom_components/innova -
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
@@ -60,11 +70,11 @@ RUN export MINIMAL_COMPONENTS=$(echo ${MINIMAL_COMPONENTS} | awk -F '|' -v OFS='
       export COMPONENTS=$(echo components.${COMPONENTS} | sed --expression='s/|/|components./g') && \
       awk -v RS= '$0~ENVIRON["COMPONENTS"]' requirements_all.txt >> requirements_strip.txt; \
     fi; \
-    if [ "${VERSION}" = "dev" ]; then \
-      echo -e "https://github.com/home-assistant/core/archive/dev.zip\npsycopg2" >> requirements_strip.txt; \
-    else \
-      echo -e "homeassistant==${VERSION}\npsycopg2" >> requirements_strip.txt; \
-    fi;
+    if [ -d "/custom_components" ]; then \
+      # grep all requirements from the manifest.json
+      find /custom_components/ -name manifest.json | xargs jq -nr 'inputs.requirements | add' >> requirements_strip.txt; \
+    fi; \
+    echo -e "homeassistant==${VERSION}\npsycopg2" >> requirements_strip.txt;
 
 # Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
 # https://github.com/rhasspy/webrtc-noise-gain/issues/9
@@ -98,6 +108,9 @@ COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python user modules
 COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
+
+# Add custom_components
+COPY --link --from=builder /custom_components /custom_components
 
 # Add home-assistant binary
 COPY --link --from=builder /tmp/.venv/bin/hass /usr/local/bin/hass
