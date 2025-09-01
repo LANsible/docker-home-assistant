@@ -8,7 +8,7 @@ ARG OTHER
 
 ENV \
   # https://github.com/home-assistant/core/releases
-  VERSION="2025.7.3" \
+  VERSION="2025.8.3" \
   # https://www.home-assistant.io/integrations/default_config/
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
   # ADDED: tts, ffmpeg
