@@ -43,9 +43,14 @@ RUN --mount=type=cache,target=/etc/apk/cache \
 # Grep some custom modules
 # https://github.com/golles/ha-knmi/releases/
 # https://github.com/danielrivard/homeassistant-innova/releases
+# https://github.com/marcolivierarsenault/moonraker-home-assistant/releases
+# https://github.com/mampfes/hacs_waste_collection_schedule/releases/
 RUN mkdir /custom_components && \
   wget -qO- https://github.com/golles/ha-knmi/releases/download/v3.0.2/knmi.zip | unzip -jd /custom_components/knmi - && \
-  wget -qO- https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.zip | unzip -jd /custom_components/innova -
+  wget -qO- https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.zip | unzip -jd /custom_components/innova - && \
+  wget -qO- https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.11.1.zip | unzip -jd /custom_components/moonraker - && \
+  wget -qO- https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/2.10.0.tar.gz \
+    | tar -xz --strip-components=2 -C /custom_components hacs_waste_collection_schedule-2.10.0/custom_components/waste_collection_schedule
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
@@ -72,7 +77,7 @@ RUN export MINIMAL_COMPONENTS=$(echo ${MINIMAL_COMPONENTS} | awk -F '|' -v OFS='
     fi; \
     if [ -d "/custom_components" ]; then \
       # grep all requirements from the manifest.json
-      find /custom_components/ -name manifest.json | xargs jq -nr 'inputs.requirements | add' >> requirements_strip.txt; \
+      find /custom_components/ -name manifest.json | xargs jq -nr '[inputs.requirements] | flatten(3) | join("\n")' >> requirements_strip.txt; \
     fi; \
     echo -e "homeassistant==${VERSION}\npsycopg2" >> requirements_strip.txt;
 
