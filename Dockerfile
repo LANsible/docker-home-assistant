@@ -44,6 +44,7 @@ RUN --mount=type=cache,target=/etc/apk/cache \
 
 # Grep some custom modules
 RUN mkdir /custom_components && \
+  export IFS="|"; \
   for url in $CUSTOM_COMPONENTS; do \
     wget -qO- "$url" | tar -xz -C /custom_components/ --strip-components=2 --wildcards '*/custom_components/*'; \
   done
