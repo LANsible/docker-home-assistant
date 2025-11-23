@@ -1,9 +1,10 @@
-ARG IMAGE=python:3.13-alpine
+ARG IMAGE=python:3.14-alpine
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
 ARG COMPONENTS
+ARG CUSTOM_COMPONENTS
 ARG OTHER
 
 ENV \
@@ -37,22 +38,15 @@ RUN --mount=type=cache,target=/etc/apk/cache \
     ffmpeg-dev \
     libjpeg-turbo \
     # to parse the manifest.json files of custom_components
-    jq
+    jq \
+    # add gnu tar for wildcards matching in extract of custom components
+    tar
 
-# TODO: make this an ENV var
 # Grep some custom modules
-# https://github.com/golles/ha-knmi/releases/
-# https://github.com/danielrivard/homeassistant-innova/releases
-# https://github.com/marcolivierarsenault/moonraker-home-assistant/releases
-# https://github.com/kamaradclimber/heishamon-homeassistant/releases
-# https://github.com/mampfes/hacs_waste_collection_schedule/releases/
 RUN mkdir /custom_components && \
-  wget -qO- https://github.com/golles/ha-knmi/releases/download/v3.0.2/knmi.zip | unzip -jd /custom_components/knmi - && \
-  wget -qO- https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.zip | unzip -jd /custom_components/innova - && \
-  wget -qO- https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.11.1.zip | unzip -jd /custom_components/moonraker - && \
-  wget -qO- https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/1.18.3.zip | unzip -jd /custom_components/aquarea - && \
-  wget -qO- https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/2.10.0.tar.gz \
-    | tar -xz --strip-components=2 -C /custom_components hacs_waste_collection_schedule-2.10.0/custom_components/waste_collection_schedule
+  for url in $CUSTOM_COMPONENTS; do \
+    wget -qO- "$url" | tar -xz -C /custom_components/ --strip-components=2 --wildcards '*/custom_components/*'; \
+  done
 
 # Setup requirements files
 # NOTE: add package_constraints in subfolder so the `-c homeassistant/package_constraints.txt` in requirements.txt works
@@ -114,7 +108,7 @@ ENV HOME=/dev/shm \
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python user modules
-COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
+COPY --link --from=builder /tmp/.venv/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages
 
 # Add custom_components
 COPY --link --from=builder /custom_components /custom_components
