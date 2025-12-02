@@ -14,6 +14,8 @@ ENV \
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
   # ADDED: tts, ffmpeg
   MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp|tts|ffmpeg" \
+  # https://github.com/home-assistant/docker-base/blob/master/alpine/Dockerfile#L14C1-L14C75
+  LANG="C.UTF-8" \
   UV_EXTRA_INDEX_URL="https://wheels.home-assistant.io/musllinux-index/"
 
 RUN echo "hass:x:1000:1000:hass:/:" > /etc_passwd
@@ -89,6 +91,8 @@ RUN --mount=type=cache,target=/root/.cache \
     # link mode is needed since cache is on tmpdir
     uv pip install \
       --link-mode=copy \
+      --no-build \
+      --index-strategy unsafe-best-match \
       -r requirements.txt \
       -r requirements_strip.txt && \
     # update shebang to global python
