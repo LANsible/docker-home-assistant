@@ -1,4 +1,4 @@
-ARG IMAGE=python:3.14-alpine
+ARG IMAGE=python:3.13-alpine
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
@@ -113,7 +113,7 @@ ENV HOME=/dev/shm \
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python user modules
-COPY --link --from=builder /tmp/.venv/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages
+COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
 
 # Add custom_components
 COPY --link --from=builder /custom_components /custom_components
