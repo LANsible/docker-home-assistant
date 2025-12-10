@@ -1,4 +1,4 @@
-ARG IMAGE=python:3.13-alpine
+ARG IMAGE=python:3.13-alpine@sha256:51b5354ed44df6e1a3b3faf6d3a3d40da129621046b6d5a707b7c1f44d258ed6
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
@@ -138,7 +138,7 @@ RUN --mount=type=cache,target=/etc/apk/cache \
 
 # go2rtc binary check below for version:
 # https://github.com/home-assistant/core/blob/dev/Dockerfile#L28C69-L28C74
-COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.12 /usr/local/bin/go2rtc /usr/local/bin/go2rtc
+COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.12@sha256:baef0aa19d759fcfd31607b34ce8eaf039d496282bba57731e6ae326896d7640 /usr/local/bin/go2rtc /usr/local/bin/go2rtc
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
