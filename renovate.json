@@ -4,9 +4,8 @@
     "config:best-practices"
   ],
   "enabledManagers": [
-    "docker"
+    "dockerfile"
   ],
-  // https://docs.renovatebot.com/modules/manager/regex/#advanced-capture
   "customManagers": [
     {
       "customType": "regex",
