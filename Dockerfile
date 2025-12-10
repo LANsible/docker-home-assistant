@@ -7,9 +7,8 @@ ARG COMPONENTS
 ARG CUSTOM_COMPONENTS
 ARG OTHER
 
-ENV \
-  # https://github.com/home-assistant/core/releases
-  VERSION="2025.12.2" \
+# renovate: datasource=github-tags depName=home-assistant/core versioning=loose
+ENV VERSION="2025.12.2" \
   # https://www.home-assistant.io/integrations/default_config/
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
   # ADDED: tts, ffmpeg
