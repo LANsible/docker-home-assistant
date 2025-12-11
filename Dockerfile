@@ -7,7 +7,7 @@ ARG COMPONENTS
 ARG CUSTOM_COMPONENTS
 ARG OTHER
 
-# renovate: datasource=github-tags depName=home-assistant/core versioning=loose
+# renovate: datasource=pypi depName=home-assistant versioning=loose
 ENV VERSION="2025.12.2" \
   # https://www.home-assistant.io/integrations/default_config/
   # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
