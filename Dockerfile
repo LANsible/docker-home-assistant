@@ -8,7 +8,7 @@ ARG CUSTOM_COMPONENTS
 ARG OTHER
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
-ENV HASS_VERSION="2025.12.2"
+ENV HASS_VERSION="2025.12.3"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
 # ADDED: tts, ffmpeg
