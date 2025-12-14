@@ -55,9 +55,9 @@ RUN mkdir /custom_components && \
 # NOTE: setup the pip.conf from the hass base image so musl compiled wheels are available
 WORKDIR /tmp
 RUN mkdir -p /tmp/homeassistant && \
-    wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements_all.txt" && \
-    wget -q "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/requirements.txt" && \
-    wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/homeassistant/package_constraints.txt" && \
+    wget -q "https://raw.githubusercontent.com/home-assistant/core/${HASS_VERSION}/requirements_all.txt" && \
+    wget -q "https://raw.githubusercontent.com/home-assistant/core/${HASS_VERSION}/requirements.txt" && \
+    wget -qP homeassistant "https://raw.githubusercontent.com/home-assistant/core/${HASS_VERSION}/homeassistant/package_constraints.txt" && \
     wget -qP /etc/ "https://raw.githubusercontent.com/home-assistant/docker-base/master/alpine/rootfs/etc/pip.conf"
 
 # Strip requirements_all.txt to just what I need for my components
@@ -77,7 +77,7 @@ RUN export MINIMAL_COMPONENTS=$(echo ${MINIMAL_COMPONENTS} | awk -F '|' -v OFS='
       # grep all requirements from the manifest.json
       find /custom_components/ -name manifest.json | xargs jq -nr '[inputs.requirements] | flatten(3) | join("\n")' >> requirements_strip.txt; \
     fi; \
-    echo -e "homeassistant==${VERSION}\npsycopg2" >> requirements_strip.txt;
+    echo -e "homeassistant==${HASS_VERSION}\npsycopg2" >> requirements_strip.txt;
 
 # Makeflags source: https://math-linux.com/linux/tip-of-the-day/article/speedup-gnu-make-build-and-compilation-process
 # https://github.com/rhasspy/webrtc-noise-gain/issues/9
