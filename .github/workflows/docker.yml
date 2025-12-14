@@ -13,8 +13,7 @@ jobs:
       # https://github.com/marcolivierarsenault/moonraker-home-assistant/releases
       # https://github.com/kamaradclimber/heishamon-homeassistant/releases
       # https://github.com/mampfes/hacs_waste_collection_schedule/releases/
-      # https://github.com/PhantomPhoton/S3-Compatible/releaseshttps://github.com/PhantomPhoton/S3-Compatible/releases
       build_args: |
         COMPONENTS=mqtt|buienradar|denonavr|androidtv|opentherm_gw|utility_meter|season|unifi|home_connect|stookwijzer
-        CUSTOM_COMPONENTS=https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.4.tar.gz|https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.11.1.tar.gz|https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/1.18.3.tar.gz|https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/2.10.0.tar.gz|https://github.com/PhantomPhoton/S3-Compatible/archive/refs/tags/v1.0.2.tar.gz
+        CUSTOM_COMPONENTS=https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.4.tar.gz|https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.11.1.tar.gz|https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/1.18.3.tar.gz|https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/2.10.0.tar.gz
     secrets: inherit
