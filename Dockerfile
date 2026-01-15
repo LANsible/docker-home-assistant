@@ -88,8 +88,10 @@ RUN --mount=type=cache,target=/root/.cache \
     pip3 install --root-user-action=ignore uv && \
     uv venv && \
     # link mode is needed since cache is on tmpdir
+    # refresh to renew the wheels supplied from index
     uv pip install \
       --link-mode=copy \
+      --refresh \
       --no-build \
       --index-strategy unsafe-best-match \
       -r requirements.txt \
