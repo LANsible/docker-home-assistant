@@ -1,4 +1,4 @@
-ARG IMAGE=python:3.13-alpine3.22@sha256:ab45bd32143151fe060d48218b91df43a289166e72ec7877823b1c972580bed3
+ARG IMAGE=python:3.14-alpine3.22@sha256:91859223a313a4407c239afb3a8e68bddc3dbfb0d24ddc5bdeb029136b55b150
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
@@ -88,8 +88,10 @@ RUN --mount=type=cache,target=/root/.cache \
     pip3 install --root-user-action=ignore uv && \
     uv venv && \
     # link mode is needed since cache is on tmpdir
+    # refresh to renew the wheels supplied from index
     uv pip install \
       --link-mode=copy \
+      --refresh \
       --no-build \
       --index-strategy unsafe-best-match \
       -r requirements.txt \
@@ -112,7 +114,7 @@ ENV HOME=/dev/shm \
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python user modules
-COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
+COPY --link --from=builder /tmp/.venv/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages
 
 # Add custom_components
 COPY --link --from=builder /custom_components /custom_components
