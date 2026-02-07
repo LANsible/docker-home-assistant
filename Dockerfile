@@ -1,4 +1,4 @@
-ARG IMAGE=python:3.13-alpine3.22@sha256:d3808bc9142a3f6839f23ad91da4ca2acc23f5f4c80065ea42a84846c6effab1
+ARG IMAGE=python:3.14-alpine3.22@sha256:b0d9cd5ed77285b2563c86ca10b53578249ca1a08d14e5b69b7970884a9fb539
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
