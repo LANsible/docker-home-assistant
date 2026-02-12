@@ -138,7 +138,7 @@ RUN --mount=type=cache,target=/etc/apk/cache \
 
 # go2rtc binary check below for version:
 # https://github.com/home-assistant/core/blob/dev/Dockerfile#L28C69-L28C74
-COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.13@sha256:f394f6329f5389a4c9a7fc54b09fdec9621bbb78bf7a672b973440bbdfb02241 /usr/local/bin/go2rtc /usr/local/bin/go2rtc
+COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.14@sha256:675c318b23c06fd862a61d262240c9a63436b4050d177ffc68a32710d9e05bae /usr/local/bin/go2rtc /usr/local/bin/go2rtc
 
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
