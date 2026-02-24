@@ -1,4 +1,4 @@
-ARG IMAGE=python:3.13-alpine3.22@sha256:41351b07080ccfaa27bf38dde20de79ee6a0ac74a58c00c6d7a7d96ac4e69716
+ARG IMAGE=python:3.14-alpine3.22@sha256:b0d9cd5ed77285b2563c86ca10b53578249ca1a08d14e5b69b7970884a9fb539
 
 FROM $IMAGE AS builder
 SHELL ["/bin/ash", "-o", "pipefail", "-c"]
@@ -112,7 +112,7 @@ ENV HOME=/dev/shm \
 COPY --from=builder /etc_passwd /etc/passwd
 
 # Copy Python user modules
-COPY --link --from=builder /tmp/.venv/lib/python3.13/site-packages/ /usr/local/lib/python3.13/site-packages
+COPY --link --from=builder /tmp/.venv/lib/python3.14/site-packages/ /usr/local/lib/python3.14/site-packages
 
 # Add custom_components
 COPY --link --from=builder /custom_components /custom_components
