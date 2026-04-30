@@ -6,15 +6,10 @@ SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 ARG COMPONENTS
 # default to components I use since the github workflow file does not allow splitting the arg over multilines
 ARG CUSTOM_COMPONENTS=\
-  # renovate: datatesource=github-tags packageName=golles/ha-knmi
   https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.5.tar.gz|\
-  # renovate: datatesource=github-tags packageName=danielrivard/homeassistant-innova
   https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|\
-  # renovate: datatesource=github-tags packageName=marcolivierarsenault/moonraker-home-assistant
   https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.13.3.tar.gz|\
-  # renovate: datatesource=github-tags packageName=kamaradclimber/heishamon-homeassistant
   https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.5.13.tar.gz|\
-  # renovate: datatesource=github-tags packageName=mampfes/hacs_waste_collection_schedule
   https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.19.0.tar.gz
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose

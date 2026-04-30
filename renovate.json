@@ -7,5 +7,14 @@
   "enabledManagers": [
     "dockerfile",
     "custom.regex"
+  ],
+  "customManagers": [
+      {
+      "customType": "regex",
+      "matchStrings": [
+        "https://github.com/(?<packageName>.*?)/archive/refs/tags/(?<currentValue>.*?)(.tar.gz|.zip)"
+      ],
+      "datasourceTemplate": "github-tags"
+    }
   ]
 }

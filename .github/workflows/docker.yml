@@ -8,11 +8,6 @@ jobs:
     uses: LANsible/github-workflows/.github/workflows/docker-build.yml@main
     with:
       image_name: lansible/home-assistant
-      # https://github.com/golles/ha-knmi/releases/
-      # https://github.com/danielrivard/homeassistant-innova/releases
-      # https://github.com/marcolivierarsenault/moonraker-home-assistant/releases
-      # https://github.com/kamaradclimber/heishamon-homeassistant/releases
-      # https://github.com/mampfes/hacs_waste_collection_schedule/releases/
       build_args: |
         COMPONENTS=mqtt|buienradar|denonavr|androidtv|opentherm_gw|utility_meter|season|unifi|home_connect|stookwijzer
     secrets: inherit
