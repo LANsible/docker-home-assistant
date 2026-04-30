@@ -12,7 +12,7 @@ ARG CUSTOM_COMPONENTS=\
   https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.5.15.tar.gz|\
   https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.21.0.tar.gz
 
-# renovate: datasource=pypi depName=homeassistant versioning=loose
+# renovate: datasource=pypi depName=homeassistant versioning=loose allowedVersions=!/[a-z]]$/
 ENV HASS_VERSION="2026.4.4"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
