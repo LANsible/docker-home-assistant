@@ -11,6 +11,9 @@
   "customManagers": [
       {
       "customType": "regex",
+      "managerFilePatterns": [
+        "Dockerfile"
+      ],
       "matchStrings": [
         "https://github.com/(?<packageName>.*?)/archive/refs/tags/(?<currentValue>.*?)(.tar.gz|.zip)"
       ],
