@@ -17,7 +17,7 @@ ENV HASS_VERSION="2026.4.4"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
 # ADDED: tts, ffmpeg
-ENV MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp|tts|ffmpeg"
+ENV MINIMAL_COMPONENTS="generic|frontend|assist_pipeline|backup|config|conversation|energy|go2rtc|history|homeassistant_alerts|cloud|image_upload|logbook|media_source|mobile_app|my|ssdp|stream|sun|usb|webhook|isal|otp|tts|ffmpeg|hassio"
 # https://github.com/home-assistant/docker-base/blob/master/alpine/Dockerfile#L14C1-L14C75
 ENV LANG="C.UTF-8"
 ENV UV_EXTRA_INDEX_URL="https://wheels.home-assistant.io/musllinux-index/"
