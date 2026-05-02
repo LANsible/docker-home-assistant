@@ -10,7 +10,7 @@ https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.5.tar.gz|\
 https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|\
 https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.13.3.tar.gz|\
 https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.5.15.tar.gz|\
-https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.21.0.tar.gz"
+https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.22.0.tar.gz"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose allowedVersions=!/[a-z]]$/
 ENV HASS_VERSION="2026.4.4"
