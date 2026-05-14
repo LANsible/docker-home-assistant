@@ -13,7 +13,7 @@ https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.5.
 https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.23.0.tar.gz"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
-ENV HASS_VERSION="2026.4.4"
+ENV HASS_VERSION="2026.5.1"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
 # ADDED: tts, ffmpeg
