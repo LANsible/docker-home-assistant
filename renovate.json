@@ -8,6 +8,12 @@
     "dockerfile",
     "custom.regex"
   ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["homeassistant"],
+      "allowedVersions": "!/[a-z]$/"
+    }
+  ],
   "customManagers": [
       {
       "customType": "regex",
