@@ -148,6 +148,15 @@ COPY --link --from=ghcr.io/alexxit/go2rtc:1.9.14@sha256:675c318b23c06fd862a61d26
 # Adds entrypoint
 COPY ./entrypoint.sh /entrypoint.sh
 
+COPY fix_usb_esphome_import.patch /usr/local/lib/python3.14/site-packages/fix_usb_esphome_import.patch
+
+RUN --mount=type=cache,target=/etc/apk/cache \
+  apk add patch && \
+  cd /usr/local/lib/python3.14/site-packages && \
+  patch -p1 < fix_usb_esphome_import.patch && \
+  rm -f /usr/local/lib/python3.14/site-packages/fix_usb_esphome_import.patch && \
+  apk del patch
+
 USER hass
 ENTRYPOINT ["/bin/busybox", "ash", "/entrypoint.sh" ]
 CMD ["hass", "--config=/data", "--log-file=/proc/self/fd/1", "--log-no-color", "--skip-pip"]
