@@ -19,6 +19,12 @@ if [ ! -L "/data/custom_components" ]; then
   ln -sf "/custom_components/" "/data/custom_components"
 fi
 
+if [ ! -L "/data/www/local" ]; then
+  echo "Creating symlink from /www/ to /data/www/local/"
+  mkdir -p "/data/www"
+  ln -sf "/www/" "/data/www/local"
+fi
+
 if [ -d "/config" ]; then
   # For each config file create a symlink
   for file in /config/*; do

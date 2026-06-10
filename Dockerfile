@@ -11,6 +11,9 @@ https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.ta
 https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.13.3.tar.gz|\
 https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.6.1.tar.gz|\
 https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.27.0.tar.gz"
+ARG FRONTEND_MODULES="\
+https://github.com/custom-cards/button-card/releases/download/v7.0.1/button-card.js|\
+https://github.com/NemesisRE/kiosk-mode/releases/download/v14.0.0/kiosk-mode-es5.js"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
 ENV HASS_VERSION="2026.6.2"
@@ -48,11 +51,18 @@ RUN --mount=type=cache,target=/etc/apk/cache \
     # add gnu tar for wildcards matching in extract of custom components
     tar
 
-# # Grep some custom modules
+# Grep some custom modules
 RUN mkdir /custom_components && \
   export IFS="|"; \
   for url in $CUSTOM_COMPONENTS; do \
     wget -qO- "$url" | tar -xz -C /custom_components/ --strip-components=2 --wildcards '*/custom_components/*'; \
+  done
+
+# Grep frontend modules
+RUN mkdir /www && \
+  export IFS="|"; \
+  for url in $FRONTEND_MODULES; do \
+    wget -qP /www "$url"; \
   done
 
 # Setup requirements files
