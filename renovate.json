@@ -21,7 +21,7 @@
         "Dockerfile"
       ],
       "matchStrings": [
-        "https://github.com/(?<packageName>.*?)(/archive/refs/tags/|releases/download/)(?<currentValue>v?[0-9]*\\.[0-9]*\\.[0-9]*)"
+        "https://github.com/(?<packageName>.*?)(/archive/refs/tags/|/releases/download/)(?<currentValue>v?[0-9]*\\.[0-9]*\\.[0-9]*)"
       ],
       "datasourceTemplate": "github-tags"
     }
