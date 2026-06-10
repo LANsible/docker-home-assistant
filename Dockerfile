@@ -133,6 +133,9 @@ COPY --link --from=builder /tmp/.venv/lib/python3.14/site-packages/ /usr/local/l
 # Add custom_components
 COPY --link --from=builder /custom_components /custom_components
 
+# Add frontend modules
+COPY --link --from=builder /www /www
+
 # Add home-assistant binary
 COPY --link --from=builder /tmp/.venv/bin/hass /usr/local/bin/hass
 
