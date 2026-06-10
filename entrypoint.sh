@@ -14,16 +14,12 @@ if [ ! -d "/data" ]; then
   exit 1
 fi
 
-if [ ! -L "/data/custom_components" ]; then
-  echo "Creating symlink from /custom_components/ to /data/custom_components"
-  ln -sf "/custom_components/" "/data/custom_components"
-fi
-
-if [ ! -L "/data/www/local" ]; then
-  echo "Creating symlink from /www/ to /data/www/local/"
-  mkdir -p "/data/www"
-  ln -sf "/www/" "/data/www/local"
-fi
+for folder in "custom_components" "www"; do
+  if [ ! -L "/data/$folder" ]; then
+    echo "Creating symlink from /$folder/ to /data/$folder"
+    ln -sf "/$folder/" "/data/$folder"
+  fi
+done
 
 if [ -d "/config" ]; then
   # For each config file create a symlink
