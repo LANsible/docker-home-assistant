@@ -10,7 +10,7 @@ https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.5.tar.gz|\
 https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|\
 https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.13.3.tar.gz|\
 https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.6.1.tar.gz|\
-https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.27.0.tar.gz"
+https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.28.0.tar.gz"
 ARG FRONTEND_MODULES="\
 https://github.com/custom-cards/button-card/releases/download/v7.0.1/button-card.js|\
 https://github.com/NemesisRE/kiosk-mode/releases/download/v14.0.0/kiosk-mode-es5.js|\
