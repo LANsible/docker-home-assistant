@@ -6,7 +6,7 @@ SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 ARG COMPONENTS
 # default to components I use since the github workflow file does not allow splitting the arg over multilines
 ARG CUSTOM_COMPONENTS="\
-https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.5.tar.gz|\
+https://github.com/golles/ha-knmi/archive/refs/tags/v3.0.6.tar.gz|\
 https://github.com/danielrivard/homeassistant-innova/archive/refs/tags/v1.5.1.tar.gz|\
 https://github.com/marcolivierarsenault/moonraker-home-assistant/archive/refs/tags/1.13.3.tar.gz|\
 https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.6.1.tar.gz|\
