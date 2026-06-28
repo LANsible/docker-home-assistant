@@ -13,7 +13,7 @@ https://github.com/kamaradclimber/heishamon-homeassistant/archive/refs/tags/2.6.
 https://github.com/mampfes/hacs_waste_collection_schedule/archive/refs/tags/v2.29.0.tar.gz"
 ARG FRONTEND_MODULES="\
 https://github.com/custom-cards/button-card/releases/download/v7.0.1/button-card.js|\
-https://github.com/NemesisRE/kiosk-mode/releases/download/v14.0.0/kiosk-mode-es5.js|\
+https://github.com/NemesisRE/kiosk-mode/releases/download/v14.0.1/kiosk-mode-es5.js|\
 https://github.com/piitaya/lovelace-mushroom/releases/download/v5.2.0/mushroom.js"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
