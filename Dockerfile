@@ -17,7 +17,7 @@ https://github.com/NemesisRE/kiosk-mode/releases/download/v14.1.0/kiosk-mode-es5
 https://github.com/piitaya/lovelace-mushroom/releases/download/v5.2.2/mushroom.js"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
-ENV HASS_VERSION="2026.9.0"
+ENV HASS_VERSION="2026.9.1"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
 # ADDED: tts, ffmpeg
