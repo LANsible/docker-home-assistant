@@ -1,7 +1,7 @@
 ARG IMAGE=python:3.14-alpine3.22@sha256:6b91e66ab2a880ce9ca5a1b91c70f45963ff71ff68268df056336e1a657d5efd
 
 FROM $IMAGE AS builder
-SHELL ["/bin/ash", "-o", "pipefail", "-c"]
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 ARG COMPONENTS
 # default to components I use since the github workflow file does not allow splitting the arg over multilines
