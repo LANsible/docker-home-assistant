@@ -18,7 +18,7 @@ https://github.com/piitaya/lovelace-mushroom/releases/download/v5.3.0/mushroom.j
 https://raw.githubusercontent.com/Hypfer/lovelace-valetudo-map-card/refs/heads/master/dist/valetudo-map-card.js"
 
 # renovate: datasource=pypi depName=homeassistant versioning=loose
-ENV HASS_VERSION="2026.11.3"
+ENV HASS_VERSION="2026.12.0b2"
 # https://www.home-assistant.io/integrations/default_config/
 # REMOVED: dhcp, bluetooth, zeroconf (makes no sense without hostnetwork/usb)
 # ADDED: tts, ffmpeg
