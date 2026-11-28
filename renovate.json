@@ -11,7 +11,7 @@
   "packageRules": [
     {
       "matchPackageNames": ["homeassistant"],
-      "allowedVersions": "!/[a-z]$/"
+      "allowedVersions": "!/[a-z]/"
     }
   ],
   "customManagers": [
